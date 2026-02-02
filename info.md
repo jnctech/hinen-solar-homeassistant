@@ -34,4 +34,8 @@ All sensors are compatible with Home Assistant's Energy Dashboard for tracking:
 - Grid import/export
 - Home consumption
 
-[View Full Documentation →](https://github.com/yourusername/hinen)
+## ⚠️ Beta Status
+
+This integration is currently in beta. The Australia (AU) region has a known OAuth authentication issue. See the [repository](https://github.com/jnctech/hinen-solar-homeassistant) for updates.
+
+[View Full Documentation →](https://github.com/jnctech/hinen-solar-homeassistant)
