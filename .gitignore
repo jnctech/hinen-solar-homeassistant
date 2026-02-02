@@ -62,3 +62,11 @@ test_*.py
 *_creds.*
 *.env
 solartrack/
+
+# Personal/private documentation (keep local only)
+OAUTH_TROUBLESHOOTING.md
+SUPPORT_EMAIL_DRAFT.md
+TESTING_RESULTS.md
+GITHUB_ISSUE_TEMPLATE.md
+DEPLOYMENT_CHECKLIST.md
+PROJECT_STATUS.md
