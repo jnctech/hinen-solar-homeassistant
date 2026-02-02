@@ -1,8 +1,12 @@
 # Hinen Solar Home Assistant Integration
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
+[![GitHub release](https://img.shields.io/github/v/release/jnctech/hinen-solar-homeassistant)](https://github.com/jnctech/hinen-solar-homeassistant/releases)
+[![License](https://img.shields.io/github/license/jnctech/hinen-solar-homeassistant.svg)](LICENSE)
 
 A custom Home Assistant integration for Hinen solar inverters, PV systems, and battery storage using the celinksmart cloud platform.
+
+> **⚠️ Beta Status:** This integration is currently in beta. The Australia (AU) region OAuth page has a known issue that prevents authentication. See [Issue #1](https://github.com/jnctech/hinen-solar-homeassistant/issues) for status updates. SG and GB regions should work correctly.
 
 ## Features
 
@@ -24,7 +28,7 @@ A custom Home Assistant integration for Hinen solar inverters, PV systems, and b
 2. Go to "Integrations"
 3. Click the three dots (⋮) in the top right
 4. Select "Custom repositories"
-5. Add this repository URL: `https://github.com/yourusername/hinen`
+5. Add this repository URL: `https://github.com/jnctech/hinen-solar-homeassistant`
 6. Select category: "Integration"
 7. Click "Add"
 8. Find "Hinen Solar" in HACS and click "Download"
@@ -187,9 +191,9 @@ hass -c config
 
 ## Support
 
-- 🐛 **Bug Reports**: [Open an issue](https://github.com/yourusername/hinen/issues)
-- 💡 **Feature Requests**: [Start a discussion](https://github.com/yourusername/hinen/discussions)
-- 📖 **Documentation**: [Wiki](https://github.com/yourusername/hinen/wiki)
+- 🐛 **Bug Reports**: [Open an issue](https://github.com/jnctech/hinen-solar-homeassistant/issues)
+- 💡 **Feature Requests**: [Start a discussion](https://github.com/jnctech/hinen-solar-homeassistant/discussions)
+- 📖 **Documentation**: [Wiki](https://github.com/jnctech/hinen-solar-homeassistant/wiki)
 
 ## Contributing
 

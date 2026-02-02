@@ -1,5 +1,15 @@
 # Hinen Solar Integration - Quick Start Guide
 
+## ⚠️ Current Status
+
+**This integration is currently in beta and awaiting testing.**
+
+**Known Issue:** The Australia (AU) region OAuth authorization page has a bug that prevents authentication. If you're in the AU region, please wait for Hinen to fix this issue before attempting installation. Singapore (SG) and United Kingdom (GB) regions should work correctly.
+
+**See [Issue #1](https://github.com/jnctech/hinen-solar-homeassistant/issues) for updates.**
+
+---
+
 ## Prerequisites
 
 Before you begin, make sure you have:
@@ -20,25 +30,30 @@ Before you begin, make sure you have:
 
 ## Step 2: Install the Integration
 
-### Option A: HACS (Recommended)
+### Option A: HACS Custom Repository
 
 1. Open **HACS** in Home Assistant
 2. Click on **Integrations**
-3. Click the **⋮** (three dots) in the top right
+3. Click the **⋮** (three dots) in the top right corner
 4. Select **Custom repositories**
-5. Add repository: `https://github.com/yourusername/hinen`
-6. Category: **Integration**
+5. Add this URL: `https://github.com/jnctech/hinen-solar-homeassistant`
+6. Select Category: **Integration**
 7. Click **Add**
-8. Search for **"Hinen Solar"** in HACS
-9. Click **Download**
-10. **Restart Home Assistant**
+8. Click **✓** to close the custom repositories dialog
+9. Search for **"Hinen Solar"** in HACS integrations list
+10. Click on **Hinen Solar**
+11. Click **Download**
+12. **Restart Home Assistant**
 
 ### Option B: Manual Installation
 
-1. Download the [latest release](https://github.com/yourusername/hinen/releases)
+1. Download the [latest release](https://github.com/jnctech/hinen-solar-homeassistant/releases)
 2. Extract the ZIP file
-3. Copy `custom_components/hinen` to your Home Assistant `config/custom_components/` directory
+3. Copy the `custom_components/hinen` folder to your Home Assistant `config/custom_components/` directory
+   - If `custom_components` doesn't exist, create it in your config folder
 4. **Restart Home Assistant**
+
+**Note:** This integration is not yet available in the default HACS repository. Use the custom repository method above.
 
 ## Step 3: Configure the Integration
 

@@ -1,12 +1,12 @@
 {
   "domain": "hinen",
   "name": "Hinen Solar",
-  "codeowners": ["@yourusername"],
+  "codeowners": ["@jnctech"],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://github.com/yourusername/hinen",
+  "documentation": "https://github.com/jnctech/hinen-solar-homeassistant",
   "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/yourusername/hinen/issues",
+  "issue_tracker": "https://github.com/jnctech/hinen-solar-homeassistant/issues",
   "requirements": [],
   "version": "0.1.0"
 }
