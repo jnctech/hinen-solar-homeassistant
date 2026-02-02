@@ -61,3 +61,4 @@ secret.txt
 test_*.py
 *_creds.*
 *.env
+solartrack/
