@@ -1,0 +1,41 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configure Hinen Solar",
+        "description": "Enter your Hinen Developer Platform credentials. You can obtain your Client ID and Client Secret from the Hinen Developer Platform at https://developer.celinksmart.com",
+        "data": {
+          "client_id": "Client ID",
+          "client_secret": "Client Secret",
+          "region_code": "Region Code"
+        }
+      },
+      "authorize": {
+        "title": "Authorize Hinen Solar",
+        "description": "Please visit the following URL to authorize Home Assistant to access your Hinen solar system:\n\n{auth_url}\n\nAfter logging in and authorizing, you will receive an authorization code. Enter it below.",
+        "data": {
+          "authorization_code": "Authorization Code"
+        }
+      }
+    },
+    "error": {
+      "auth_failed": "Authentication failed. Please check your credentials and authorization code.",
+      "no_devices": "No devices found. Please ensure your devices are registered in the Hinen platform.",
+      "cannot_connect": "Unable to connect to Hinen servers. Please check your internet connection.",
+      "unknown": "An unknown error occurred."
+    },
+    "abort": {
+      "already_configured": "This Hinen account is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Hinen Solar Options",
+        "data": {
+          "scan_interval": "Update interval (seconds)"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "domain": "hinen",
+  "name": "Hinen Solar",
+  "codeowners": ["@yourusername"],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/yourusername/hinen",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/yourusername/hinen/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}
