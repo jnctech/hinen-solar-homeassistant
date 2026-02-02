@@ -66,7 +66,9 @@ class HinenConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             self._region_code = user_input["region_code"]
 
             # Generate OAuth URL for user to authorize
-            auth_url = f"{OAUTH_AUTHORIZE_URL}?language=en_US&key={self._client_id}&state=homeassistant"
+            # redirectUrl parameter is required for some regions (e.g., AU)
+            # Using a placeholder URL since this is a device authorization flow
+            auth_url = f"{OAUTH_AUTHORIZE_URL}?language=en_US&key={self._client_id}&state=homeassistant&redirectUrl=http://localhost"
 
             return self.async_show_form(
                 step_id="authorize",
