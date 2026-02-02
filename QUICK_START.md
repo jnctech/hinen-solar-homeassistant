@@ -213,9 +213,8 @@ entities:
 
 ## Support
 
-- **GitHub Issues**: [Report bugs](https://github.com/yourusername/hinen/issues)
-- **Discussions**: [Ask questions](https://github.com/yourusername/hinen/discussions)
-- **Hinen Support**: Contact for API access issues
+- **GitHub Issues**: [Report bugs](https://github.com/jnctech/hinen-solar-homeassistant/issues)
+- **Hinen Support**: Contact Hinen technical support for API access issues or OAuth problems
 
 ## Next Steps
 
