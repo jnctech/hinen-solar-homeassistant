@@ -1,14 +1,6 @@
 # Hinen Solar Integration - Quick Start Guide
 
-## ⚠️ Current Status
-
-**This integration is currently in beta and awaiting testing.**
-
-**Known Issue:** The Australia (AU) region OAuth authorization page has a bug that prevents authentication. If you're in the AU region, please wait for Hinen to fix this issue before attempting installation. Singapore (SG) and United Kingdom (GB) regions should work correctly.
-
-**See [Issue #1](https://github.com/jnctech/hinen-solar-homeassistant/issues) for updates.**
-
----
+Get your Hinen solar system integrated with Home Assistant in just a few minutes!
 
 ## Prerequisites
 
