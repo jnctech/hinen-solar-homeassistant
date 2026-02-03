@@ -1,6 +1,8 @@
-# Hinen Solar Integration
+# Hinen Solar Advanced
 
-Monitor your Hinen solar inverter, battery storage, and PV system in Home Assistant.
+**Release Candidate v1.0.0-rc1** - Advanced monitoring with 35+ sensors for your Hinen solar system.
+
+> **Complementary Integration:** Works alongside the [official Hinen Power](https://github.com/Hinen-IoT/ha_hinen_power) integration. Use both for complete coverage!
 
 ## Features
 
