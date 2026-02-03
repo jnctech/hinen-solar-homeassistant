@@ -87,10 +87,10 @@ class HinenBinarySensor(CoordinatorEntity, BinarySensorEntity):
         self._attr_name = f"{device_name} {description.name}"
         self._attr_unique_id = f"{device_id}_{description.key}"
 
-        # Set device info
+        # Set device info with unique identifier to avoid conflicts with official integration
         device_data = coordinator.devices.get(device_id, {})
         self._attr_device_info = {
-            "identifiers": {(DOMAIN, device_id)},
+            "identifiers": {(DOMAIN, f"{device_id}_advanced")},
             "name": device_name,
             "manufacturer": "Hinen",
             "model": device_data.get("model_code", "Solar Inverter"),

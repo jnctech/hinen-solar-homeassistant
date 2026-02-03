@@ -4,7 +4,7 @@
 [![GitHub release](https://img.shields.io/github/v/release/jnctech/hinen-solar-homeassistant)](https://github.com/jnctech/hinen-solar-homeassistant/releases)
 [![License](https://img.shields.io/github/license/jnctech/hinen-solar-homeassistant.svg)](LICENSE)
 
-> **🚀 Release Candidate:** This is version 1.0.0-rc1. Early adopters welcome! Please report any issues.
+> **🚀 Release Candidate 2:** This is version 1.0.0-rc2. **CRITICAL FIX:** Resolved device identifier collision with official Hinen Power integration. Both integrations now work perfectly side-by-side!
 
 **Advanced monitoring integration** for Hinen solar inverters, PV systems, and battery storage. Provides **35+ detailed sensors** for power users who want comprehensive monitoring beyond the official integration.
 
