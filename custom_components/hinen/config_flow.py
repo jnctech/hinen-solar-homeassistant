@@ -9,8 +9,10 @@ from homeassistant import config_entries
 from homeassistant.core import callback
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.network import get_url
 
 from .api import HinenApiClient
+from .auth_callback import async_register_callback_view
 from .const import DOMAIN, OAUTH_AUTHORIZE_URL
 
 _LOGGER = logging.getLogger(__name__)
@@ -53,6 +55,7 @@ class HinenConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         self._client_secret: str | None = None
         self._region_code: str | None = None
         self._auth_code: str | None = None
+        self._redirect_url: str | None = None
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
@@ -60,15 +63,18 @@ class HinenConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         """Handle the initial step."""
         errors: dict[str, str] = {}
 
+        # Register callback view
+        async_register_callback_view(self.hass)
+
         if user_input is not None:
             self._client_id = user_input["client_id"]
             self._client_secret = user_input["client_secret"]
             self._region_code = user_input["region_code"]
+            self._redirect_url = user_input.get("redirect_url")
 
             # Generate OAuth URL for user to authorize
             # redirectUrl parameter is required for all regions
-            # Using a placeholder URL since this is a device authorization flow
-            auth_url = f"{OAUTH_AUTHORIZE_URL}?language=en_US&key={self._client_id}&state=homeassistant&redirectUrl=http://localhost"
+            auth_url = f"{OAUTH_AUTHORIZE_URL}?language=en_US&key={self._client_id}&state=homeassistant&redirectUrl={self._redirect_url}"
 
             return self.async_show_form(
                 step_id="authorize",
@@ -89,6 +95,10 @@ class HinenConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     vol.Required("client_id"): str,
                     vol.Required("client_secret"): str,
                     vol.Required("region_code"): vol.In(REGIONS),
+                    vol.Optional(
+                        "redirect_url",
+                        default="http://homeassistant.local:8123/api/hinen_solar/oauth/callback",
+                    ): str,
                 }
             ),
             errors=errors,
