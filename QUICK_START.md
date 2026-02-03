@@ -1,7 +1,5 @@
 # Hinen Solar Advanced - Quick Start Guide
 
-> **🚀 Release Candidate:** Version 1.0.0-rc1 - Early adopters welcome!
-
 Get comprehensive monitoring of your Hinen solar system with 35+ sensors in just a few minutes!
 
 > **💡 Tip:** This integration focuses on advanced monitoring. For control features, also check out the [official Hinen Power integration](https://github.com/Hinen-IoT/ha_hinen_power). Both can run together!
