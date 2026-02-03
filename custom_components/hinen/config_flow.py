@@ -123,7 +123,7 @@ class HinenConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 else:
                     # Create config entry
                     return self.async_create_entry(
-                        title=f"Hinen Solar ({self._region_code})",
+                        title=f"Hinen Solar Advanced ({self._region_code})",
                         data={
                             "client_id": self._client_id,
                             "client_secret": self._client_secret,

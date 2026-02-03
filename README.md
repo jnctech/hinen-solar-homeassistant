@@ -1,22 +1,39 @@
-# Hinen Solar Home Assistant Integration
+# Hinen Solar Advanced - Home Assistant Integration
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
 [![GitHub release](https://img.shields.io/github/v/release/jnctech/hinen-solar-homeassistant)](https://github.com/jnctech/hinen-solar-homeassistant/releases)
 [![License](https://img.shields.io/github/license/jnctech/hinen-solar-homeassistant.svg)](LICENSE)
 
-A custom Home Assistant integration for Hinen solar inverters, PV systems, and battery storage using the celinksmart cloud platform.
+**Advanced monitoring integration** for Hinen solar inverters, PV systems, and battery storage. Provides **35+ detailed sensors** for power users who want comprehensive monitoring beyond the official integration.
+
+> **💡 Complementary Integration:** This integration focuses on **advanced monitoring** with 35+ sensors including PV string details, 3-phase grid monitoring, and battery health metrics. It works alongside the [official Hinen Power integration](https://github.com/Hinen-IoT/ha_hinen_power) which provides control features. **You can run both together!**
+
+## Why Use This Integration?
+
+**Official Hinen Power Integration:**
+- ✅ 12 basic sensors
+- ✅ Control features (work modes, charge/discharge settings)
+- ✅ Simple setup
+
+**Hinen Solar Advanced (This Integration):**
+- ✅ **35+ sensors** - 3x more monitoring data
+- ✅ **PV String Monitoring** - Track each of your 4 solar panel strings individually
+- ✅ **3-Phase Grid Monitoring** - Essential for commercial installations
+- ✅ **Battery Health** - Voltage, current, temperature tracking
+- ✅ **Detailed Energy Statistics** - Daily, monthly, yearly breakdowns
+- ✅ Advanced monitoring for power users and solar enthusiasts
 
 ## Features
 
-- ✅ **OAuth2 Authentication**: Secure authentication with celinksmart API
-- 🌍 **Multi-Region Support**: Europe, Asia-Pacific, and Australia data centers
 - 📊 **35+ Sensors**: Comprehensive monitoring of solar, battery, grid, and load
-- 🔋 **Battery Management**: SOC, voltage, current, temperature, charging state
-- ☀️ **PV Monitoring**: Up to 4 PV strings with voltage, current, and power
-- ⚡ **Grid Monitoring**: 3-phase voltage, current, power, and frequency
+- ☀️ **PV String Monitoring**: Up to 4 PV strings with voltage, current, and power
+- ⚡ **3-Phase Grid Monitoring**: Voltage, current, power, and frequency per phase
+- 🔋 **Battery Health**: SOC, voltage, current, temperature, charging state
 - 📈 **Energy Statistics**: Daily, monthly, yearly, and total energy tracking
 - 🏠 **Energy Dashboard**: Full compatibility with Home Assistant energy dashboard
+- 🌍 **Multi-Region Support**: Europe, Asia-Pacific, and Australia data centers
 - 🔄 **Automatic Token Refresh**: Seamless re-authentication
+- ✅ **OAuth2 Authentication**: Secure cloud authentication
 
 ## Installation
 
@@ -42,22 +59,28 @@ A custom Home Assistant integration for Hinen solar inverters, PV systems, and b
 
 ### Prerequisites
 
-1. **Get Developer Credentials**:
-   - Contact Hinen technical support for developer platform access
+1. **Developer Credentials**:
+   - Contact Hinen technical support to request developer platform access
    - Log in to [Hinen Developer Platform](https://developer.celinksmart.com)
    - Navigate to: Backend Management → Application List
    - Copy your **Client ID** and **Client Secret**
 
-2. **Identify Your Region**:
-   - Determine your region code (e.g., AU, GB, DE, SG)
-   - See the full [list of supported regions](#supported-regions)
+2. **Hinen Account**: Active account with registered solar devices
+
+3. **Your Region**: Know your region code (e.g., AU, GB, DE, SG) - see [supported regions](#supported-regions)
 
 ### Setup Steps
 
 1. In Home Assistant, go to: **Settings** → **Devices & Services**
 2. Click **+ Add Integration**
-3. Search for **"Hinen Solar"**
-4. Enter your credentials:
+3. Search for **"Hinen Solar Advanced"**
+4. Enter your **Client ID** from the developer platform
+5. Enter your **Client Secret**
+6. Select your **Region**
+7. Follow the OAuth authorization link
+8. Sign in with your Hinen account
+9. Copy and paste the authorization code
+10. Done! Your 35+ sensors will appear automatically
    - Client ID
    - Client Secret
    - Region Code (e.g., AU for Australia)
