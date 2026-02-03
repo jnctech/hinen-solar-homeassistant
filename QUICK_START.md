@@ -1,6 +1,10 @@
-# Hinen Solar Integration - Quick Start Guide
+# Hinen Solar Advanced - Quick Start Guide
 
-Get your Hinen solar system integrated with Home Assistant in just a few minutes!
+> **🚀 Release Candidate:** Version 1.0.0-rc1 - Early adopters welcome!
+
+Get comprehensive monitoring of your Hinen solar system with 35+ sensors in just a few minutes!
+
+> **💡 Tip:** This integration focuses on advanced monitoring. For control features, also check out the [official Hinen Power integration](https://github.com/Hinen-IoT/ha_hinen_power). Both can run together!
 
 ## Prerequisites
 
@@ -8,8 +12,8 @@ Before you begin, make sure you have:
 
 1. ✅ **Home Assistant** installed and running (2023.1.0 or later)
 2. ✅ **HACS** installed (for easy installation)
-3. ✅ **Hinen Developer Account** with Client ID and Client Secret
-4. ✅ **Hinen Solar System** registered in your account
+3. ✅ **Hinen Developer Credentials** (Client ID and Client Secret) from [Hinen Developer Platform](https://developer.celinksmart.com)
+4. ✅ **Hinen Account** with registered solar devices
 
 ## Step 1: Get Your API Credentials
 

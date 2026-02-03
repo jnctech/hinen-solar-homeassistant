@@ -4,6 +4,8 @@
 [![GitHub release](https://img.shields.io/github/v/release/jnctech/hinen-solar-homeassistant)](https://github.com/jnctech/hinen-solar-homeassistant/releases)
 [![License](https://img.shields.io/github/license/jnctech/hinen-solar-homeassistant.svg)](LICENSE)
 
+> **🚀 Release Candidate:** This is version 1.0.0-rc1. Early adopters welcome! Please report any issues.
+
 **Advanced monitoring integration** for Hinen solar inverters, PV systems, and battery storage. Provides **35+ detailed sensors** for power users who want comprehensive monitoring beyond the official integration.
 
 > **💡 Complementary Integration:** This integration focuses on **advanced monitoring** with 35+ sensors including PV string details, 3-phase grid monitoring, and battery health metrics. It works alongside the [official Hinen Power integration](https://github.com/Hinen-IoT/ha_hinen_power) which provides control features. **You can run both together!**
@@ -74,27 +76,19 @@
 1. In Home Assistant, go to: **Settings** → **Devices & Services**
 2. Click **+ Add Integration**
 3. Search for **"Hinen Solar Advanced"**
-4. Enter your **Client ID** from the developer platform
-5. Enter your **Client Secret**
-6. Select your **Region**
-7. Follow the OAuth authorization link
-8. Sign in with your Hinen account
-9. Copy and paste the authorization code
-10. Done! Your 35+ sensors will appear automatically
-   - Client ID
-   - Client Secret
-   - Region Code (e.g., AU for Australia)
+4. Enter your credentials:
+   - **Client ID** from the developer platform
+   - **Client Secret** from the developer platform
+   - **Region** (e.g., AU for Australia)
 5. Click **Submit**
-6. **Authorization**:
-   - You'll be shown an authorization URL
-   - Open the URL in your browser
-   - Log in with your Hinen account credentials
-   - Authorize the application
-   - Copy the **Authorization Code** you receive
-7. Paste the authorization code back into Home Assistant
-8. Click **Submit**
+6. Follow the **OAuth authorization link** shown
+7. Sign in with your **Hinen account** credentials
+8. Authorize the application
+9. Copy the **authorization code** you receive
+10. Paste it back into Home Assistant
+11. Click **Submit**
 
-Your Hinen solar system will now be integrated!
+Your 35+ sensors will appear automatically!
 
 ## Sensors
 
