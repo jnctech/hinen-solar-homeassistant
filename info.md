@@ -1,6 +1,6 @@
 # Hinen Solar Advanced
 
-Advanced monitoring with 35+ sensors for your Hinen solar system.
+**Release Candidate v1.0.0-rc1** - Advanced monitoring with 35+ sensors for your Hinen solar system.
 
 > **Complementary Integration:** Works alongside the [official Hinen Power](https://github.com/Hinen-IoT/ha_hinen_power) integration. Use both for complete coverage!
 

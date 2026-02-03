@@ -4,6 +4,8 @@
 [![GitHub release](https://img.shields.io/github/v/release/jnctech/hinen-solar-homeassistant)](https://github.com/jnctech/hinen-solar-homeassistant/releases)
 [![License](https://img.shields.io/github/license/jnctech/hinen-solar-homeassistant.svg)](LICENSE)
 
+> **🚀 Release Candidate:** This is version 1.0.0-rc1. Early adopters welcome! Please report any issues.
+
 **Advanced monitoring integration** for Hinen solar inverters, PV systems, and battery storage. Provides **35+ detailed sensors** for power users who want comprehensive monitoring beyond the official integration.
 
 > **💡 Complementary Integration:** This integration focuses on **advanced monitoring** with 35+ sensors including PV string details, 3-phase grid monitoring, and battery health metrics. It works alongside the [official Hinen Power integration](https://github.com/Hinen-IoT/ha_hinen_power) which provides control features. **You can run both together!**
