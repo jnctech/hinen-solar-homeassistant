@@ -6,8 +6,6 @@
 
 A custom Home Assistant integration for Hinen solar inverters, PV systems, and battery storage using the celinksmart cloud platform.
 
-> **⚠️ Beta Status:** This integration is currently in beta. The Australia (AU) region OAuth page has a known issue that prevents authentication. See [Issue #1](https://github.com/jnctech/hinen-solar-homeassistant/issues) for status updates. SG and GB regions should work correctly.
-
 ## Features
 
 - ✅ **OAuth2 Authentication**: Secure authentication with celinksmart API
