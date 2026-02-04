@@ -3,18 +3,19 @@
     "step": {
       "user": {
         "title": "Configure Hinen Solar",
-        "description": "Enter your Hinen Developer Platform credentials. You can obtain your Client ID and Client Secret from the Hinen Developer Platform at https://developer.celinksmart.com",
+        "description": "Enter your Hinen Developer Platform credentials. You can obtain your Client ID and Client Secret from the Hinen Developer Platform at https://developer.celinksmart.com\n\nThe redirect URL will be auto-detected, but you can customize it if needed (e.g., for external access).",
         "data": {
           "client_id": "Client ID",
           "client_secret": "Client Secret",
-          "region_code": "Region Code"
+          "region_code": "Region Code",
+          "redirect_url": "OAuth Redirect URL (optional)"
         }
       },
       "authorize": {
         "title": "Authorize Hinen Solar",
-        "description": "Please visit the following URL to authorize Home Assistant to access your Hinen solar system:\n\n{auth_url}\n\nAfter logging in and authorizing, you will receive an authorization code. Enter it below.",
+        "description": "Click the link below to authorize Home Assistant:\n\n{auth_url}\n\nAfter authorizing, you will be redirected back automatically. If automatic redirect fails, you can manually enter the authorization code below.\n\nRedirect URL: {redirect_url}",
         "data": {
-          "authorization_code": "Authorization Code"
+          "authorization_code": "Authorization Code (if needed)"
         }
       }
     },
