@@ -149,24 +149,24 @@ class HinenConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     # Exchange authorization code for tokens
                     token_data = await api.async_get_access_token(auth_code)
 
-                # Verify by fetching devices
-                devices = await api.async_get_devices()
+                    # Verify by fetching devices
+                    devices = await api.async_get_devices()
 
-                if not devices:
-                    errors["base"] = "no_devices"
-                else:
-                    # Create config entry
-                    return self.async_create_entry(
-                        title=f"Hinen Solar Advanced ({self._region_code})",
-                        data={
-                            "client_id": self._client_id,
-                            "client_secret": self._client_secret,
-                            "region_code": self._region_code,
-                            "access_token": token_data["access_token"],
-                            "refresh_token": token_data["refresh_token"],
-                            "host": token_data["host"],
-                        },
-                    )
+                    if not devices:
+                        errors["base"] = "no_devices"
+                    else:
+                        # Create config entry
+                        return self.async_create_entry(
+                            title=f"Hinen Solar Advanced ({self._region_code})",
+                            data={
+                                "client_id": self._client_id,
+                                "client_secret": self._client_secret,
+                                "region_code": self._region_code,
+                                "access_token": token_data["access_token"],
+                                "refresh_token": token_data["refresh_token"],
+                                "host": token_data["host"],
+                            },
+                        )
 
                 except Exception as err:
                     _LOGGER.error("Error during authorization: %s", err)
