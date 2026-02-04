@@ -112,11 +112,12 @@ class HinenOAuth2CallbackView(HomeAssistantView):
 """
 
         if auth_code:
-            html_content += """
+            html_content += f"""
         <div class="success">✓</div>
         <h1>Authorization Successful!</h1>
-        <p>You can close this window and return to Home Assistant.</p>
-        <p class="close-msg">This window will close automatically in 3 seconds...</p>
+        <p>Submitting authorization code...</p>
+        <p class="close-msg">This window will close automatically.</p>
+        <input type="hidden" id="auth_code" value="{auth_code}">
 """
         else:
             error_msg = user_input.get("error_description", "Unknown error")
@@ -130,14 +131,47 @@ class HinenOAuth2CallbackView(HomeAssistantView):
         html_content += """
     </div>
     <script>
-        // Auto-close window after 3 seconds if authorization was successful
 """
 
         if auth_code:
+            html_content += f"""
+        // Auto-fill and submit the authorization code in the opener window
+        if (window.opener && !window.opener.closed) {{
+            try {{
+                // Find the authorization code input field in the config flow
+                const authInput = window.opener.document.querySelector('input[name="authorization_code"]');
+                if (authInput) {{
+                    authInput.value = "{auth_code}";
+                    authInput.dispatchEvent(new Event('input', {{ bubbles: true }}));
+                    authInput.dispatchEvent(new Event('change', {{ bubbles: true }}));
+
+                    // Find and click the submit button
+                    const submitButton = window.opener.document.querySelector('button[type="submit"]');
+                    if (submitButton) {{
+                        setTimeout(function() {{
+                            submitButton.click();
+                            window.close();
+                        }}, 500);
+                    }} else {{
+                        // If no submit button, just close after a delay
+                        setTimeout(function() {{ window.close(); }}, 2000);
+                    }}
+                }} else {{
+                    // Input not found, close after delay
+                    setTimeout(function() {{ window.close(); }}, 3000);
+                }}
+            }} catch (e) {{
+                console.error('Failed to auto-submit:', e);
+                setTimeout(function() {{ window.close(); }}, 3000);
+            }}
+        }} else {{
+            // No opener window, just close
+            setTimeout(function() {{ window.close(); }}, 3000);
+        }}
+"""
+        else:
             html_content += """
-        setTimeout(function() {
-            window.close();
-        }, 3000);
+        // Keep window open on error so user can see the message
 """
 
         html_content += """
