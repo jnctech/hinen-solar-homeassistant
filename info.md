@@ -1,6 +1,6 @@
 # Hinen Solar Advanced
 
-**Release Candidate v1.0.0-rc2** - Advanced monitoring with 35+ sensors for your Hinen solar system.
+**Release Candidate v1.0.0-rc3** - Advanced monitoring with 35+ sensors. NEW: Automatic OAuth redirect!
 
 > **⚠️ Compatibility:** Cannot run alongside [official Hinen Power](https://github.com/Hinen-IoT/ha_hinen_power) on same account. Choose one or use separate Hinen accounts.
 
