@@ -4,11 +4,11 @@
 [![GitHub release](https://img.shields.io/github/v/release/jnctech/hinen-solar-homeassistant)](https://github.com/jnctech/hinen-solar-homeassistant/releases)
 [![License](https://img.shields.io/github/license/jnctech/hinen-solar-homeassistant.svg)](LICENSE)
 
-> **🚀 Release Candidate 2:** This is version 1.0.0-rc2. **CRITICAL FIX:** Resolved device identifier collision with official Hinen Power integration. Both integrations now work perfectly side-by-side!
+> **🚀 Release Candidate 2:** This is version 1.0.0-rc2. **IMPORTANT:** Added conflict detection with official Hinen Power integration.
 
 **Advanced monitoring integration** for Hinen solar inverters, PV systems, and battery storage. Provides **35+ detailed sensors** for power users who want comprehensive monitoring beyond the official integration.
 
-> **💡 Complementary Integration:** This integration focuses on **advanced monitoring** with 35+ sensors including PV string details, 3-phase grid monitoring, and battery health metrics. It works alongside the [official Hinen Power integration](https://github.com/Hinen-IoT/ha_hinen_power) which provides control features. **You can run both together!**
+> **⚠️ COMPATIBILITY NOTICE:** This integration **cannot run simultaneously** with the [official Hinen Power integration](https://github.com/Hinen-IoT/ha_hinen_power) on the same Hinen account due to API session limitations. See [Compatibility](#compatibility) section below for details and workarounds.
 
 ## Why Use This Integration?
 
@@ -24,6 +24,36 @@
 - ✅ **Battery Health** - Voltage, current, temperature tracking
 - ✅ **Detailed Energy Statistics** - Daily, monthly, yearly breakdowns
 - ✅ Advanced monitoring for power users and solar enthusiasts
+
+## Compatibility
+
+### ⚠️ Cannot Run with Official Hinen Power Integration
+
+**Important:** This integration **cannot run simultaneously** with the [official Hinen Power integration](https://github.com/Hinen-IoT/ha_hinen_power) when using the **same Hinen account**.
+
+**Why?** The Hinen API enforces session limitations that prevent multiple integrations from accessing the same account concurrently. When both are installed:
+- One integration will show "Device Unavailable" or "Couldn't connect" errors
+- API requests from one integration may invalidate the other's session
+- Only one integration can reliably update at a time
+
+**Note:** The Hinen mobile app CAN run alongside either integration (mobile apps use different API endpoints).
+
+### Workarounds
+
+**Option 1: Choose One Integration**
+- Use **Hinen Solar Advanced** if you want detailed monitoring (35+ sensors)
+- Use **Hinen Power** if you need control features (changing modes, settings)
+
+**Option 2: Use Separate Hinen Accounts** (Advanced Users)
+- Create a second Hinen account
+- Share your solar devices to the second account (if supported by Hinen)
+- Use one account for Hinen Power, another for Hinen Solar Advanced
+
+**Future:** We're working on resolving this limitation by using the same underlying API library as the official integration. Track progress in [Issue #2](https://github.com/jnctech/hinen-solar-homeassistant/issues/2).
+
+### Installation will be blocked if official integration is detected
+
+The integration will automatically detect if Hinen Power is installed and prevent installation to avoid conflicts. If you want to use Hinen Solar Advanced, remove Hinen Power first.
 
 ## Features
 
