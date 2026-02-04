@@ -25,7 +25,8 @@
       "unknown": "An unknown error occurred."
     },
     "abort": {
-      "already_configured": "This Hinen account is already configured."
+      "already_configured": "This Hinen account is already configured.",
+      "conflict_with_official": "⚠️ Integration Conflict Detected\n\nThe official {integration_name} integration is already installed. Due to API session limitations, both integrations cannot run simultaneously on the same Hinen account.\n\nOptions:\n1. Use only Hinen Solar Advanced (remove Hinen Power first)\n2. Use only Hinen Power (cancel this setup)\n3. Use separate Hinen accounts (share devices between accounts)\n\nFor more information, see: https://github.com/jnctech/hinen-solar-homeassistant#compatibility"
     }
   },
   "options": {

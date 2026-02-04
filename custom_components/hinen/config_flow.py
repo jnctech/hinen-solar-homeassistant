@@ -60,6 +60,16 @@ class HinenConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         """Handle the initial step."""
         errors: dict[str, str] = {}
 
+        # Check for conflict with official Hinen Power integration
+        for entry in self.hass.config_entries.async_entries():
+            if entry.domain == "hinen_power":
+                return self.async_abort(
+                    reason="conflict_with_official",
+                    description_placeholders={
+                        "integration_name": "Hinen Power",
+                    },
+                )
+
         if user_input is not None:
             self._client_id = user_input["client_id"]
             self._client_secret = user_input["client_secret"]
