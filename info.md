@@ -1,6 +1,6 @@
 # Hinen Solar Advanced
 
-**Release Candidate v1.0.0-rc3** - Advanced monitoring with 35+ sensors. NEW: Automatic OAuth redirect!
+**Release Candidate v1.0.0-rc4** - Advanced monitoring with 35+ sensors. Automatic OAuth redirect working!
 
 > **⚠️ Compatibility:** Cannot run alongside [official Hinen Power](https://github.com/Hinen-IoT/ha_hinen_power) on same account. Choose one or use separate Hinen accounts.
 
@@ -18,9 +18,10 @@
 1. Obtain your Client ID and Client Secret from the [Hinen Developer Platform](https://developer.celinksmart.com)
 2. Add the integration in Home Assistant
 3. Enter your credentials and region code
-4. Authorize via the provided URL
-5. Enter the authorization code
-6. Done! Your devices will appear automatically
+4. Click the authorization URL
+5. After authorizing, you'll be redirected back automatically
+6. Click Submit - the authorization code is auto-detected!
+7. Done! Your devices will appear automatically
 
 ## Supported Regions
 
