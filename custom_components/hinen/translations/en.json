@@ -12,9 +12,9 @@
       },
       "authorize": {
         "title": "Authorize Hinen Solar",
-        "description": "Please visit the following URL to authorize Home Assistant to access your Hinen solar system:\n\n{auth_url}\n\nAfter logging in and authorizing, you will receive an authorization code. Enter it below.",
+        "description": "1. Click this link to authorize: {auth_url}\n\n2. After authorizing, you will be redirected back to: {redirect_url}\n\n3. Return here and click Submit (leave field empty to auto-detect)\n\nOr manually enter the authorization code if auto-detection fails.",
         "data": {
-          "authorization_code": "Authorization Code"
+          "authorization_code": "Authorization Code (leave empty for auto-detect)"
         }
       }
     },

@@ -90,11 +90,12 @@ class HinenConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 step_id="authorize",
                 data_schema=vol.Schema(
                     {
-                        vol.Required("authorization_code"): str,
+                        vol.Optional("authorization_code", default=""): str,
                     }
                 ),
                 description_placeholders={
                     "auth_url": auth_url,
+                    "redirect_url": self._redirect_url,
                 },
             )
 
@@ -121,19 +122,32 @@ class HinenConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         errors: dict[str, str] = {}
 
         if user_input is not None:
-            session = async_get_clientsession(self.hass)
-            api = HinenApiClient(
-                session=session,
-                client_id=self._client_id,
-                client_secret=self._client_secret,
-                region_code=self._region_code,
-            )
+            auth_code = user_input.get("authorization_code", "").strip()
 
-            try:
-                # Exchange authorization code for tokens
-                token_data = await api.async_get_access_token(
-                    user_input["authorization_code"]
+            # Check if callback received the code (when user submits empty form)
+            if not auth_code and DOMAIN in self.hass.data:
+                callback_data = self.hass.data[DOMAIN].get("oauth_callback")
+                if callback_data and "authorization_code" in callback_data:
+                    auth_code = callback_data["authorization_code"]
+                    # Clear the callback data
+                    self.hass.data[DOMAIN].pop("oauth_callback", None)
+                    _LOGGER.info("Using authorization code from OAuth callback")
+
+            if not auth_code:
+                errors["base"] = "auth_failed"
+                errors["authorization_code"] = "Please enter the authorization code or complete the OAuth flow"
+            else:
+                session = async_get_clientsession(self.hass)
+                api = HinenApiClient(
+                    session=session,
+                    client_id=self._client_id,
+                    client_secret=self._client_secret,
+                    region_code=self._region_code,
                 )
+
+                try:
+                    # Exchange authorization code for tokens
+                    token_data = await api.async_get_access_token(auth_code)
 
                 # Verify by fetching devices
                 devices = await api.async_get_devices()
@@ -154,15 +168,15 @@ class HinenConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                         },
                     )
 
-            except Exception as err:
-                _LOGGER.error("Error during authorization: %s", err)
-                errors["base"] = "auth_failed"
+                except Exception as err:
+                    _LOGGER.error("Error during authorization: %s", err)
+                    errors["base"] = "auth_failed"
 
         return self.async_show_form(
             step_id="authorize",
             data_schema=vol.Schema(
                 {
-                    vol.Required("authorization_code"): str,
+                    vol.Optional("authorization_code", default=""): str,
                 }
             ),
             errors=errors,
