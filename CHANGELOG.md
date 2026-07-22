@@ -1,5 +1,35 @@
 # Changelog
 
+## 1.1.0 — 2026-07-22
+
+### Changed — breaking for automations
+- **Work Mode option values are stable slugs instead of display labels.**
+  `select.<device>_work_mode` now reports and accepts `self_consumption`,
+  `battery_priority`, `grid_priority`, `time_period` and `power_keeping`. Friendly
+  labels come from translations, so re-wording a label no longer breaks automations.
+  These are the same slugs — for the same device values — that the legacy
+  `hinen_power` integration used, so automations written against it work unchanged.
+
+  **Migration from 1.0.x:** replace the label with its slug — `Self-use` →
+  `self_consumption`, `Battery priority` → `battery_priority`, `Feed-in priority` →
+  `grid_priority`, `Time of use` → `time_period`, `Power-saving` → `power_keeping`.
+  **Entity IDs are unchanged.**
+
+### Added
+- **Diagnostics** (device page → Download diagnostics), with OAuth tokens, client id
+  and secret, serial number and device id redacted.
+- README: a configuration-parameters reference, plus Troubleshooting and Removal
+  sections.
+
+### Fixed
+- A device that stayed unreachable logged an error on **every** 60-second poll. The
+  outage is now logged once, repeats drop to debug, and recovery is logged when the
+  device returns.
+
+### Internal
+- Coordinator moved from `hass.data` to `entry.runtime_data` via a typed config entry.
+- `PARALLEL_UPDATES` set per platform (0 read-only, 1 for controls so writes serialise).
+
 ## 1.0.1 — 2026-07-22
 
 ### Added

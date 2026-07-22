@@ -14,12 +14,13 @@ from .entity import HinenControlEntity
 
 PARALLEL_UPDATES = 1
 
-# option label -> device enum value
-_LABEL_TO_VALUE = {label: value for value, label in WORK_MODE_OPTIONS.items()}
+# option slug -> device enum value
+_SLUG_TO_VALUE = {slug: value for value, slug in WORK_MODE_OPTIONS.items()}
 
 WORK_MODE_DESCRIPTION = SelectEntityDescription(
     key="WorkModeSetting",
     name="Work Mode",
+    translation_key="work_mode",
     entity_category=EntityCategory.CONFIG,
     options=list(WORK_MODE_OPTIONS.values()),
 )
@@ -49,6 +50,6 @@ class HinenWorkModeSelect(HinenControlEntity, SelectEntity):
 
     async def async_select_option(self, option: str) -> None:
         """Set the work mode and verify the device applied it."""
-        if (value := _LABEL_TO_VALUE.get(option)) is None:
+        if (value := _SLUG_TO_VALUE.get(option)) is None:
             raise HomeAssistantError(f"Unknown work mode: {option}")
         await self._async_write(value)

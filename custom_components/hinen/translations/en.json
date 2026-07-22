@@ -33,5 +33,19 @@
     "create_entry": {
       "default": "Successfully authenticated with Hinen."
     }
+  },
+  "entity": {
+    "select": {
+      "work_mode": {
+        "name": "Work Mode",
+        "state": {
+          "self_consumption": "Self-use",
+          "battery_priority": "Battery priority",
+          "grid_priority": "Feed-in priority",
+          "time_period": "Time of use",
+          "power_keeping": "Power-saving"
+        }
+      }
+    }
   }
 }

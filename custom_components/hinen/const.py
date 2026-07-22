@@ -46,11 +46,15 @@ STATUS_OFFLINE = 0
 STATUS_ONLINE = 1
 STATUS_HIBERNATE = 2
 
-# Writable work-mode enum (WorkModeSetting property) — device value -> HA option.
+# Writable work-mode enum (WorkModeSetting property) — device value -> HA option slug.
+# The slugs deliberately match the legacy `hinen_power` integration's for the same
+# device values, so automations written against it keep working unchanged. Friendly
+# labels live in translations, so re-wording one is not a breaking change for
+# automations the way changing an option value is.
 WORK_MODE_OPTIONS = {
-    10: "Self-use",
-    11: "Battery priority",
-    12: "Feed-in priority",
-    13: "Time of use",
-    14: "Power-saving",
+    10: "self_consumption",
+    11: "battery_priority",
+    12: "grid_priority",
+    13: "time_period",
+    14: "power_keeping",
 }

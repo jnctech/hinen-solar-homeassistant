@@ -80,6 +80,20 @@ Time of use / Power-saving) and setpoint numbers — Max Charge SOC, Forced Char
 Cutoff SOC, Min Discharge SOC, Forced Discharge Cutoff SOC, Charge/Discharge Power
 Limit.
 
+Work Mode option values are **stable slugs**, not the labels shown in the UI, so
+re-wording a label never breaks an automation. Bind automations to these:
+
+| Slug | Shown as |
+| --- | --- |
+| `self_consumption` | Self-use |
+| `battery_priority` | Battery priority |
+| `grid_priority` | Feed-in priority |
+| `time_period` | Time of use |
+| `power_keeping` | Power-saving |
+
+These are the same slugs (and the same device values) the legacy `hinen_power`
+integration used, so automations written against it keep working unchanged.
+
 ### Energy Dashboard
 
 Use **Total Yield** (`CumulativeProductionActive`) as your **Solar production**

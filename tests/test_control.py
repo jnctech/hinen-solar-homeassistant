@@ -83,9 +83,34 @@ async def test_verified_write_api_rejection(
 async def test_work_mode_select_created(
     hass: HomeAssistant, aioclient_mock, mock_config_entry: MockConfigEntry
 ) -> None:
-    """The work-mode select maps the enum value to its label + lists options."""
+    """The work-mode select maps the enum value to a stable slug + lists options."""
     await _setup(hass, aioclient_mock, mock_config_entry)
     state = hass.states.get(SELECT_EID)
     assert state is not None
-    assert state.state == "Self-use"
-    assert "Battery priority" in state.attributes["options"]
+    # Option values are stable slugs (matching the legacy hinen_power integration),
+    # never display labels — automations bind to these, so they must not re-word.
+    assert state.state == "self_consumption"
+    assert state.attributes["options"] == [
+        "self_consumption",
+        "battery_priority",
+        "grid_priority",
+        "time_period",
+        "power_keeping",
+    ]
+
+
+async def test_work_mode_select_write_uses_slug(
+    hass: HomeAssistant, aioclient_mock, mock_config_entry: MockConfigEntry
+) -> None:
+    """Selecting by slug writes the matching device enum value."""
+    await _setup(hass, aioclient_mock, mock_config_entry)
+    aioclient_mock.put(PROPERTY_SET_URL, json={"code": "00000", "data": None})
+
+    with pytest.raises(HomeAssistantError):
+        # A display label is no longer a valid option — slugs only.
+        await hass.services.async_call(
+            "select",
+            "select_option",
+            {"entity_id": SELECT_EID, "option": "Self-use"},
+            blocking=True,
+        )
