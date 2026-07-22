@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.0 — 2026-07-22
+
+### Added
+- **`sensor.<device>_status`** — inverter run state as an enum (`off` / `normal` / `sleep`).
+  The connectivity binary sensor collapses sleep into `off`, so an inverter that
+  legitimately sleeps overnight was indistinguishable from one that had dropped
+  offline. Values match the legacy `hinen_power` semantics (0/1/2) and the entity ID
+  matches the one it used, so prior dashboard references bind straight back.
+
 ## 1.1.0 — 2026-07-22
 
 ### Changed — breaking for automations

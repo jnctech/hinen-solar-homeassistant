@@ -55,6 +55,14 @@
           "alarm": "Alarm",
           "error": "Error"
         }
+      },
+      "status": {
+        "name": "Status",
+        "state": {
+          "off": "Off",
+          "normal": "Normal",
+          "sleep": "Sleep"
+        }
       }
     }
   }

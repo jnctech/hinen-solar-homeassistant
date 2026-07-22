@@ -72,6 +72,33 @@ async def test_alert_status_and_problem_entities(
     assert problem is not None
     assert problem.state == "off"
 
+    # Fixture status = 1 -> normal.
+    status = hass.states.get("sensor.single_phase_hybrid_inverter_status")
+    assert status is not None
+    assert status.state == "normal"
+
+
+async def test_sleeping_device_is_not_offline(
+    hass: HomeAssistant, aioclient_mock, mock_config_entry: MockConfigEntry
+) -> None:
+    """A sleeping inverter must be distinguishable from an offline one.
+
+    The connectivity sensor collapses SLEEP into "off", which is a false alarm for
+    an inverter that legitimately sleeps overnight.
+    """
+    sleeping = {
+        **DEVICE_INFO_RESPONSE,
+        "data": {**DEVICE_INFO_RESPONSE["data"], "status": 2},
+    }
+    aioclient_mock.get(DEVICES_URL, json=DEVICES_RESPONSE)
+    aioclient_mock.get(DEVICE_INFO_URL, json=sleeping)
+
+    await _setup(hass, mock_config_entry)
+
+    assert hass.states.get("sensor.single_phase_hybrid_inverter_status").state == "sleep"
+    # Connectivity alone reports this identically to offline — hence the enum.
+    assert hass.states.get("binary_sensor.single_phase_hybrid_inverter_online_status").state == "off"
+
 
 async def test_faulted_but_reachable_device_reports_problem(
     hass: HomeAssistant, aioclient_mock, mock_config_entry: MockConfigEntry

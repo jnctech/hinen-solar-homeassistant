@@ -27,7 +27,7 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import ALERT_STATUS_OPTIONS, DOMAIN
+from .const import ALERT_STATUS_OPTIONS, DOMAIN, STATUS_OPTIONS
 from .coordinator import HinenConfigEntry, HinenDataUpdateCoordinator
 
 PARALLEL_UPDATES = 0
@@ -550,6 +550,18 @@ SENSOR_DESCRIPTIONS: tuple[HinenSensorEntityDescription, ...] = (
         options=list(ALERT_STATUS_OPTIONS.values()),
         entity_category=EntityCategory.DIAGNOSTIC,
         device_fn=lambda device: ALERT_STATUS_OPTIONS.get(device.get("alert_status")),
+    ),
+    # Run state. The connectivity binary sensor collapses SLEEP into "off", so a
+    # legitimately sleeping inverter is indistinguishable from an offline one;
+    # this keeps that distinction. Same entity ID as the legacy integration.
+    HinenSensorEntityDescription(
+        key="status",
+        name="Status",
+        translation_key="status",
+        device_class=SensorDeviceClass.ENUM,
+        options=list(STATUS_OPTIONS.values()),
+        entity_category=EntityCategory.DIAGNOSTIC,
+        device_fn=lambda device: STATUS_OPTIONS.get(device.get("status")),
     ),
 )
 

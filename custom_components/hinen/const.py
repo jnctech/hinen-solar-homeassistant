@@ -46,6 +46,16 @@ STATUS_OFFLINE = 0
 STATUS_ONLINE = 1
 STATUS_HIBERNATE = 2
 
+# Device run state (`status`) — device value -> option slug. Matches the legacy
+# `hinen_power` DeviceStatus semantics (0 OFF / 1 NORMAL / 2 SLEEP). Kept separate
+# from the connectivity binary sensor, which collapses SLEEP into "off" and so
+# cannot tell a sleeping inverter from an offline one.
+STATUS_OPTIONS = {
+    STATUS_OFFLINE: "off",
+    STATUS_ONLINE: "normal",
+    STATUS_HIBERNATE: "sleep",
+}
+
 # Device-level fault/alarm state (`alertStatus`) — device value -> option slug.
 # Values match the legacy `hinen_power` integration (0 NORMAL / 1 ALARM / 2 ERROR).
 # Slugs, not labels: automations bind to these (see WORK_MODE_OPTIONS below).
