@@ -1,263 +1,102 @@
-# Hinen Solar Advanced - Home Assistant Integration
+# Hinen Solar Advanced — Home Assistant Integration
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
 [![GitHub release](https://img.shields.io/github/v/release/jnctech/hinen-solar-homeassistant)](https://github.com/jnctech/hinen-solar-homeassistant/releases)
 [![License](https://img.shields.io/github/license/jnctech/hinen-solar-homeassistant.svg)](LICENSE)
 
-> **🚀 Release Candidate 4:** This is version 1.0.0-rc4. **STABLE:** Automatic OAuth redirect + conflict detection with official Hinen Power integration working perfectly!
+Monitoring **and control** for Hinen solar inverters, PV systems, and battery
+storage, via the Hinen Open API (`celinksmart.com`). Cloud-polling; you bring your
+own developer credentials, so nothing is hard-coded or shared.
 
-**Advanced monitoring integration** for Hinen solar inverters, PV systems, and battery storage. Provides **35+ detailed sensors** for power users who want comprehensive monitoring beyond the official integration.
+- **67 sensors** — PV strings, external/AC-coupled PV (e.g. a Solis on the Hinen PV
+  meter), grid, battery, temperatures, the full energy-flow matrix, daily/lifetime
+  energy, solar **yield**, and battery health (SOH, cell voltages/temps).
+- **7 controls** — work-mode selector plus SOC-limit and charge/discharge-power
+  setpoints, with **verified writes** (a write that the inverter doesn't accept
+  raises an error, so automations enforcing charging rules never silently drift).
+- **No third-party Python dependency** — authentication uses Home Assistant's own
+  Application Credentials + OAuth2 framework; the API client is self-contained.
 
-> **⚠️ COMPATIBILITY NOTICE:** This integration **cannot run simultaneously** with the [official Hinen Power integration](https://github.com/Hinen-IoT/ha_hinen_power) on the same Hinen account due to API session limitations. See [Compatibility](#compatibility) section below for details and workarounds.
+## Requirements
 
-## Why Use This Integration?
+- Home Assistant **2024.12.0** or newer.
+- Your own **Client ID** and **Client Secret** from the
+  [Hinen Developer Portal](https://developer.celinksmart.com/en_US/feedback).
+- A Hinen account with at least one commissioned device.
 
-**Official Hinen Power Integration:**
-- ✅ 12 basic sensors
-- ✅ Control features (work modes, charge/discharge settings)
-- ✅ Simple setup
+## Installation (HACS)
 
-**Hinen Solar Advanced (This Integration):**
-- ✅ **35+ sensors** - 3x more monitoring data
-- ✅ **PV String Monitoring** - Track each of your 4 solar panel strings individually
-- ✅ **3-Phase Grid Monitoring** - Essential for commercial installations
-- ✅ **Battery Health** - Voltage, current, temperature tracking
-- ✅ **Detailed Energy Statistics** - Daily, monthly, yearly breakdowns
-- ✅ Advanced monitoring for power users and solar enthusiasts
+1. HACS → **Integrations** → ⋮ → **Custom repositories**.
+2. Add `https://github.com/jnctech/hinen-solar-homeassistant`, category **Integration**.
+3. Install **Hinen Solar Advanced**, then restart Home Assistant.
 
-## Compatibility
+## Setup
 
-### ⚠️ Cannot Run with Official Hinen Power Integration
+1. **Settings → Devices & Services → Add Integration → “Hinen Solar Advanced”.**
+2. Enter:
+   - **Authorization page language** (English or 简体中文),
+   - **Client ID** and **Client Secret** (from the developer portal),
+   - **Home Assistant address** — the base URL of your instance with **no trailing
+     slash** (e.g. `http://homeassistant.local:8123`). It must be reachable from the
+     browser you complete authorization in.
+3. You’ll be sent to Hinen’s page — **choose your region and sign in**.
+4. You’re redirected back; the integration verifies your devices and creates the
+   entry. Your region is detected automatically (no dropdown to get wrong).
 
-**Important:** This integration **cannot run simultaneously** with the [official Hinen Power integration](https://github.com/Hinen-IoT/ha_hinen_power) when using the **same Hinen account**.
+### Compatibility with the official integration
 
-**Why?** The Hinen API enforces session limitations that prevent multiple integrations from accessing the same account concurrently. When both are installed:
-- One integration will show "Device Unavailable" or "Couldn't connect" errors
-- API requests from one integration may invalidate the other's session
-- Only one integration can reliably update at a time
+This integration **can run alongside** the official
+[`hinen_power`](https://github.com/Hinen-IoT/ha_hinen_power) integration — it uses a
+distinct domain, callback path, and device identifiers. API usage is small
+(2 requests per device per poll), so running both stays well within rate limits.
 
-**Note:** The Hinen mobile app CAN run alongside either integration (mobile apps use different API endpoints).
+## Entities
 
-### Workarounds
+**Sensors** (per device): PV1/PV2 voltage·current·power, **PV Meter Power**
+(external/AC-coupled PV such as a Solis), **PV Generation Power** (whole-array
+total), grid voltage·current·power·frequency, battery power·voltage·current·
+temperature·SOC, inverter/DC-DC temperatures, the power-flow matrix
+(PV→battery/load/grid, grid→load/battery, battery→load/grid), daily & lifetime
+energy for each flow, **Daily Yield** / **Total Yield**, and battery health
+diagnostics (SOH, pack quantity, cell min/max voltage & temperature, ISO
+resistance, power factor). Two binary sensors: online status, battery charging.
 
-**Option 1: Choose One Integration**
-- Use **Hinen Solar Advanced** if you want detailed monitoring (35+ sensors)
-- Use **Hinen Power** if you need control features (changing modes, settings)
+**Controls** (per device): **Work Mode** (Self-use / Battery priority / Feed-in /
+Time of use / Power-saving) and setpoint numbers — Max Charge SOC, Forced Charge
+Cutoff SOC, Min Discharge SOC, Forced Discharge Cutoff SOC, Charge/Discharge Power
+Limit.
 
-**Option 2: Use Separate Hinen Accounts** (Advanced Users)
-- Create a second Hinen account
-- Share your solar devices to the second account (if supported by Hinen)
-- Use one account for Hinen Power, another for Hinen Solar Advanced
+### Energy Dashboard
 
-**Future:** We're working on resolving this limitation by using the same underlying API library as the official integration. Track progress in [Issue #2](https://github.com/jnctech/hinen-solar-homeassistant/issues/2).
+Use **Total Yield** (`CumulativeProductionActive`) as your **Solar production**
+source — it is the whole-array lifetime yield (matches the Hinen app), unlike the
+per-string sensors. Use **Total Grid Feed-in** for return-to-grid and **Total
+Energy Purchased** for grid consumption.
 
-### Installation will be blocked if official integration is detected
+## Reliability of controls
 
-The integration will automatically detect if Hinen Power is installed and prevent installation to avoid conflicts. If you want to use Hinen Solar Advanced, remove Hinen Power first.
-
-## Features
-
-- 📊 **35+ Sensors**: Comprehensive monitoring of solar, battery, grid, and load
-- ☀️ **PV String Monitoring**: Up to 4 PV strings with voltage, current, and power
-- ⚡ **3-Phase Grid Monitoring**: Voltage, current, power, and frequency per phase
-- 🔋 **Battery Health**: SOC, voltage, current, temperature, charging state
-- 📈 **Energy Statistics**: Daily, monthly, yearly, and total energy tracking
-- 🏠 **Energy Dashboard**: Full compatibility with Home Assistant energy dashboard
-- 🌍 **Multi-Region Support**: Europe, Asia-Pacific, and Australia data centers
-- 🔄 **Automatic Token Refresh**: Seamless re-authentication
-- ✅ **OAuth2 Authentication**: Secure cloud authentication
-
-## Installation
-
-### HACS (Recommended)
-
-1. Open HACS in Home Assistant
-2. Go to "Integrations"
-3. Click the three dots (⋮) in the top right
-4. Select "Custom repositories"
-5. Add this repository URL: `https://github.com/jnctech/hinen-solar-homeassistant`
-6. Select category: "Integration"
-7. Click "Add"
-8. Find "Hinen Solar" in HACS and click "Download"
-9. Restart Home Assistant
-
-### Manual Installation
-
-1. Download the latest release
-2. Copy the `custom_components/hinen` folder to your `config/custom_components/` directory
-3. Restart Home Assistant
-
-## Configuration
-
-### Prerequisites
-
-1. **Developer Credentials**:
-   - Contact Hinen technical support to request developer platform access
-   - Log in to [Hinen Developer Platform](https://developer.celinksmart.com)
-   - Navigate to: Backend Management → Application List
-   - Copy your **Client ID** and **Client Secret**
-
-2. **Hinen Account**: Active account with registered solar devices
-
-3. **Your Region**: Know your region code (e.g., AU, GB, DE, SG) - see [supported regions](#supported-regions)
-
-### Setup Steps
-
-1. In Home Assistant, go to: **Settings** → **Devices & Services**
-2. Click **+ Add Integration**
-3. Search for **"Hinen Solar Advanced"**
-4. Enter your credentials:
-   - **Client ID** from the developer platform
-   - **Client Secret** from the developer platform
-   - **Region** (e.g., AU for Australia)
-5. Click **Submit**
-6. Follow the **OAuth authorization link** shown
-7. Sign in with your **Hinen account** credentials
-8. Authorize the application
-9. Copy the **authorization code** you receive
-10. Paste it back into Home Assistant
-11. Click **Submit**
-
-Your 35+ sensors will appear automatically!
-
-## Sensors
-
-### Power Sensors
-| Sensor | Description | Unit |
-|--------|-------------|------|
-| PV Generation Power | Current solar output | W |
-| Battery Power | Charge/discharge power | W |
-| Load Power | Current consumption | W |
-| Grid Power | Import/export power | W |
-| Total System Power | Total generation | W |
-
-### Battery Sensors
-| Sensor | Description | Unit |
-|--------|-------------|------|
-| Battery SOC | State of charge | % |
-| Battery Voltage | Battery voltage | V |
-| Battery Current | Charge/discharge current | A |
-| Battery Temperature | Battery temperature | °C |
-| Battery Capacity | Total capacity | Wh |
-
-### PV String Sensors (×4)
-| Sensor | Description | Unit |
-|--------|-------------|------|
-| PV1-4 Voltage | String voltage | V |
-| PV1-4 Current | String current | A |
-| PV1-4 Power | String power | W |
-
-### Grid Sensors (3-Phase)
-| Sensor | Description | Unit |
-|--------|-------------|------|
-| R/S/T Phase Voltage | Phase voltage | V |
-| R/S/T Phase Current | Phase current | A |
-| R/S/T Phase Power | Phase power | W |
-| Grid Frequency | Frequency | Hz |
-
-### Energy Statistics
-| Sensor | Description | Unit |
-|--------|-------------|------|
-| Daily/Total Consumption | Load consumption | kWh |
-| Daily/Total Grid Feed-in | Export to grid | kWh |
-| Daily/Total Energy Purchased | Import from grid | kWh |
-| Daily/Total Charging Energy | Battery charge | kWh |
-| Daily/Total Discharging Energy | Battery discharge | kWh |
-
-### Binary Sensors
-| Sensor | Description |
-|--------|-------------|
-| Online Status | Device connectivity |
-| Battery Charging | Charging state |
-
-## Energy Dashboard Setup
-
-Configure the Energy Dashboard (**Settings** → **Dashboards** → **Energy**):
-
-- **Solar Production**: `sensor.{device}_pv_generation_power`
-- **Battery Storage**: `sensor.{device}_battery_power`
-- **Grid Consumption**: `sensor.{device}_daily_energy_purchased`
-- **Return to Grid**: `sensor.{device}_daily_grid_feed_in`
-
-## Supported Regions
-
-### Europe (EU Data Center)
-🇦🇹 Austria (AT) | 🇧🇪 Belgium (BE) | 🇧🇬 Bulgaria (BG) | 🇨🇭 Switzerland (CH) | 🇨🇾 Cyprus (CY) | 🇨🇿 Czech Republic (CZ) | 🇩🇪 Germany (DE) | 🇩🇰 Denmark (DK) | 🇪🇪 Estonia (EE) | 🇪🇸 Spain (ES) | 🇫🇮 Finland (FI) | 🇫🇷 France (FR) | 🇬🇧 United Kingdom (GB) | 🇬🇷 Greece (GR) | 🇭🇷 Croatia (HR) | 🇭🇺 Hungary (HU) | 🇮🇪 Ireland (IE) | 🇮🇹 Italy (IT) | 🇱🇹 Lithuania (LT) | 🇱🇺 Luxembourg (LU) | 🇱🇻 Latvia (LV) | 🇲🇹 Malta (MT) | 🇳🇱 Netherlands (NL) | 🇵🇱 Poland (PL) | 🇵🇹 Portugal (PT) | 🇷🇴 Romania (RO) | 🇸🇪 Sweden (SE) | 🇸🇮 Slovenia (SI) | 🇸🇰 Slovakia (SK) | 🇺🇦 Ukraine (UA)
-
-### Asia-Pacific (AP Data Center)
-🇸🇬 Singapore (SG) | 🇵🇰 Pakistan (PK)
-
-### Australia (AU Data Center)
-🇦🇺 Australia (AU) | 🇳🇿 New Zealand (NZ)
-
-## Troubleshooting
-
-### Authentication Failed
-- ✅ Verify Client ID and Client Secret
-- ✅ Check authorization code (ensure no extra spaces)
-- ✅ Confirm your account has device access
-
-### No Devices Found
-- ✅ Log in to Hinen mobile app to verify device registration
-- ✅ Contact Hinen support for account access verification
-
-### Sensors Not Updating
-- ✅ Check internet connectivity
-- ✅ Verify integration status in Settings → Devices & Services
-- ✅ Try reloading the integration
-- ✅ Check Home Assistant logs for errors
-
-### Token Expired
-- The integration automatically refreshes tokens
-- If issues persist, remove and re-add the integration
-
-## API Rate Limits
-
-- **Default**: 2500 requests per 5 minutes
-- **Custom limits**: Contact Hinen technical support
+Every control write does **set → refresh → read-back**. If the inverter reports
+neither the new value nor its commanded “shadow”, the write raises
+`HomeAssistantError` — so an automation enforcing a charging rule sees the failure
+instead of assuming success. Controls display the commanded value immediately while
+the inverter’s reported value catches up on the next poll.
 
 ## Development
 
-### Prerequisites
-- Home Assistant development environment
-- Hinen developer account
-- Python 3.11+
-
-### Testing
 ```bash
-# Set up development environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install homeassistant
-
-# Run Home Assistant in development mode
-hass -c config
+pip install -r requirements_test.txt
+pytest            # real tests: hass + aioclient_mock (no MagicMock)
+ruff check custom_components/hinen tests
+ruff format --check custom_components/hinen tests
 ```
 
-## Support
+CI runs ruff, pytest (with coverage), `hassfest`, and HACS validation.
 
-- 🐛 **Bug Reports**: [Open an issue](https://github.com/jnctech/hinen-solar-homeassistant/issues)
-- 💡 **Feature Requests**: [Start a discussion](https://github.com/jnctech/hinen-solar-homeassistant/discussions)
-- 📖 **Documentation**: [Wiki](https://github.com/jnctech/hinen-solar-homeassistant/wiki)
+## Credits
 
-## Contributing
-
-Contributions are welcome! Please:
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
+Not affiliated with or endorsed by Hinen. “Hinen” and related marks belong to their
+owners. Built for the Home Assistant community.
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) file for details
-
-## Acknowledgments
-
-- Thanks to Hinen/celinksmart for API access
-- Home Assistant community for integration framework
-- All contributors and testers
-
-## Disclaimer
-
-This is an unofficial integration and is not affiliated with or endorsed by Hinen or celinksmart.
+[Apache-2.0](LICENSE).

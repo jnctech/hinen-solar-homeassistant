@@ -1,40 +1,22 @@
 # Hinen Solar Advanced
 
-**Release Candidate v1.0.0-rc4** - Advanced monitoring with 35+ sensors. Automatic OAuth redirect working!
+Monitoring **and control** for Hinen solar inverters, PV, and battery storage via
+the Hinen Open API. You supply your own developer Client ID/Secret — nothing is
+shared or hard-coded.
 
-> **⚠️ Compatibility:** Cannot run alongside [official Hinen Power](https://github.com/Hinen-IoT/ha_hinen_power) on same account. Choose one or use separate Hinen accounts.
+- **67 sensors** — PV strings, external/AC-coupled PV (e.g. a Solis on the PV
+  meter), grid, battery, temperatures, the full energy-flow matrix, daily &
+  lifetime energy, solar yield, and battery health (SOH, cell voltages/temps).
+- **7 controls** — work-mode selector + SOC-limit and charge/discharge-power
+  setpoints, with **verified writes** so automations enforcing charging rules
+  fail loudly instead of silently drifting.
+- **No third-party Python dependency** — uses Home Assistant's Application
+  Credentials + OAuth2 framework.
 
-## Features
+**Requirements:** HA 2024.12.0+ and your own credentials from the
+[Hinen Developer Portal](https://developer.celinksmart.com/en_US/feedback).
 
-- 📊 **35+ Sensors** - Complete monitoring of your solar system
-- 🔋 **Battery Management** - SOC, power, temperature, charging state
-- ☀️ **PV Monitoring** - Track up to 4 PV strings
-- ⚡ **Grid Monitoring** - 3-phase voltage, current, power
-- 📈 **Energy Dashboard** - Full compatibility
-- 🔐 **OAuth2 Authentication** - Secure cloud connection
+Can run alongside the official `hinen_power` integration. For the Energy Dashboard,
+use **Total Yield** as the Solar production source.
 
-## Quick Setup
-
-1. Obtain your Client ID and Client Secret from the [Hinen Developer Platform](https://developer.celinksmart.com)
-2. Add the integration in Home Assistant
-3. Enter your credentials and region code
-4. Click the authorization URL
-5. After authorizing, you'll be redirected back automatically
-6. Click Submit - the authorization code is auto-detected!
-7. Done! Your devices will appear automatically
-
-## Supported Regions
-
-✅ Europe | ✅ Asia-Pacific | ✅ Australia
-
-Includes: AU, NZ, GB, DE, FR, ES, IT, NL, BE, SE, AT, CH, PL, PT, IE, DK, FI, SG, PK, and more!
-
-## Energy Dashboard Ready
-
-All sensors are compatible with Home Assistant's Energy Dashboard for tracking:
-- Solar production
-- Battery charge/discharge
-- Grid import/export
-- Home consumption
-
-[View Full Documentation →](https://github.com/jnctech/hinen-solar-homeassistant)
+[Full documentation →](https://github.com/jnctech/hinen-solar-homeassistant)
