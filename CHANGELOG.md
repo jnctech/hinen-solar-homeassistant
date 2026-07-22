@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.1 — 2026-07-22
+
+### Added
+- **Self-hosted brand icon** (`brand/icon.png` + `icon@2x.png`) — the Hinen logo now
+  shows in Home Assistant 2026.3+ via the local brands proxy (no CDN dependency).
+- README **Troubleshooting** (OAuth redirect reachability) and **Removal** sections.
+
+### Changed
+- HACS validation now runs the full check set (the temporary `brands` ignore is gone).
+- Test fixtures use synthetic device identifiers.
+
 ## 1.0.0 — 2026-07-22
 
 A near-complete rewrite onto a robust, dependency-free architecture, validated
