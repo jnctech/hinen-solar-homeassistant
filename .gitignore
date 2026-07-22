@@ -63,6 +63,12 @@ test_*.py
 *.env
 solartrack/
 
+# Internal/private docs — ENTIRE directory kept local (robust: covers ANY filename,
+# not just the ones listed below; a bare-filename miss was leaking docs/internal/*).
+# Placeholder tracked so the dir exists in-repo.
+docs/internal/*
+!docs/internal/.gitkeep
+
 # Personal/private documentation (keep local only)
 OAUTH_TROUBLESHOOTING.md
 SUPPORT_EMAIL_DRAFT.md

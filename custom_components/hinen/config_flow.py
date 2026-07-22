@@ -1,218 +1,124 @@
-"""Config flow for Hinen Solar integration."""
+"""Config flow for the Hinen Solar integration."""
 from __future__ import annotations
 
 import logging
+from collections.abc import Mapping
 from typing import Any
 
 import voluptuous as vol
-from homeassistant import config_entries
-from homeassistant.core import callback
-from homeassistant.data_entry_flow import FlowResult
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.helpers.network import get_url
 
+from homeassistant.components.application_credentials import ClientCredential
+from homeassistant.config_entries import SOURCE_REAUTH, ConfigFlowResult
+from homeassistant.const import CONF_CLIENT_ID, CONF_CLIENT_SECRET, CONF_TOKEN
+from homeassistant.helpers import config_entry_oauth2_flow
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
+
+from . import application_credentials
 from .api import HinenApiClient
-from .auth_callback import async_register_callback_view
-from .const import DOMAIN, OAUTH_AUTHORIZE_URL
+from .const import (
+    CONF_AUTH_LANGUAGE,
+    CONF_REDIRECT_BASE,
+    DEVELOPER_PORTAL_URL,
+    DOMAIN,
+    SUPPORTED_LANGUAGES,
+    TOKEN_HOST,
+)
+from .oauth2 import HinenOAuth2CallbackView
 
 _LOGGER = logging.getLogger(__name__)
 
-# Region options
-REGIONS = {
-    "AU": "Australia",
-    "NZ": "New Zealand",
-    "GB": "United Kingdom",
-    "DE": "Germany",
-    "FR": "France",
-    "ES": "Spain",
-    "IT": "Italy",
-    "NL": "Netherlands",
-    "BE": "Belgium",
-    "PL": "Poland",
-    "SE": "Sweden",
-    "AT": "Austria",
-    "CH": "Switzerland",
-    "PT": "Portugal",
-    "IE": "Ireland",
-    "DK": "Denmark",
-    "FI": "Finland",
-    "NO": "Norway",
-    "GR": "Greece",
-    "CZ": "Czech Republic",
-    "SG": "Singapore",
-    "PK": "Pakistan",
-}
 
+class HinenOAuth2FlowHandler(
+    config_entry_oauth2_flow.AbstractOAuth2FlowHandler, domain=DOMAIN
+):
+    """Handle the Hinen Solar OAuth2 config flow."""
 
-class HinenConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    """Handle a config flow for Hinen Solar."""
+    DOMAIN = DOMAIN
 
-    VERSION = 1
-
-    def __init__(self) -> None:
-        """Initialize the config flow."""
-        self._client_id: str | None = None
-        self._client_secret: str | None = None
-        self._region_code: str | None = None
-        self._auth_code: str | None = None
-        self._redirect_url: str | None = None
+    @property
+    def logger(self) -> logging.Logger:
+        """Return the logger for the flow."""
+        return _LOGGER
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
-        """Handle the initial step."""
-        errors: dict[str, str] = {}
-
-        # Check for conflict with official Hinen Power integration
-        for entry in self.hass.config_entries.async_entries():
-            if entry.domain == "hinen_power":
-                return self.async_abort(
-                    reason="conflict_with_official",
-                    description_placeholders={
-                        "integration_name": "Hinen Power",
-                    },
-                )
-
-        # Register the OAuth callback view
-        async_register_callback_view(self.hass)
-
+    ) -> ConfigFlowResult:
+        """Collect credentials, then hand off to the OAuth authorize step."""
         if user_input is not None:
-            self._client_id = user_input["client_id"]
-            self._client_secret = user_input["client_secret"]
-            self._region_code = user_input["region_code"]
-            self._redirect_url = user_input.get("redirect_url")
-
-            # Generate OAuth URL for user to authorize
-            # redirectUrl parameter is required for all regions
-            auth_url = f"{OAUTH_AUTHORIZE_URL}?language=en_US&key={self._client_id}&state=homeassistant&redirectUrl={self._redirect_url}"
-
-            return self.async_show_form(
-                step_id="authorize",
-                data_schema=vol.Schema(
-                    {
-                        vol.Optional("authorization_code", default=""): str,
-                    }
-                ),
-                description_placeholders={
-                    "auth_url": auth_url,
-                    "redirect_url": self._redirect_url,
-                },
+            credential = ClientCredential(
+                user_input[CONF_CLIENT_ID], user_input[CONF_CLIENT_SECRET]
             )
+            implementation = (
+                await application_credentials.async_get_auth_implementation(
+                    self.hass, DOMAIN, credential
+                )
+            )
+            implementation.auth_language = user_input[CONF_AUTH_LANGUAGE]
+            implementation.redirect_base = user_input[CONF_REDIRECT_BASE]
+
+            self.hass.http.register_view(HinenOAuth2CallbackView())
+            self.flow_impl = implementation
+            config_entry_oauth2_flow.async_register_implementation(
+                self.hass, DOMAIN, implementation
+            )
+            return await self.async_step_auth()
 
         return self.async_show_form(
             step_id="user",
             data_schema=vol.Schema(
                 {
-                    vol.Required("client_id"): str,
-                    vol.Required("client_secret"): str,
-                    vol.Required("region_code"): vol.In(REGIONS),
-                    vol.Optional(
-                        "redirect_url",
-                        default="http://homeassistant.local:8123/api/hinen_solar/oauth/callback",
+                    vol.Required(CONF_AUTH_LANGUAGE, default="en_US"): vol.In(
+                        SUPPORTED_LANGUAGES
+                    ),
+                    vol.Required(CONF_CLIENT_ID): str,
+                    vol.Required(CONF_CLIENT_SECRET): str,
+                    vol.Required(
+                        CONF_REDIRECT_BASE,
+                        default="http://homeassistant.local:8123",
                     ): str,
                 }
             ),
-            errors=errors,
+            description_placeholders={"portal_url": DEVELOPER_PORTAL_URL},
         )
 
-    async def async_step_authorize(
+    async def async_oauth_create_entry(self, data: dict[str, Any]) -> ConfigFlowResult:
+        """Verify the token works against the account, then create/update the entry."""
+        token = data[CONF_TOKEN]
+        session = async_get_clientsession(self.hass)
+
+        async def _token_provider() -> tuple[str, str]:
+            return token["access_token"], token[TOKEN_HOST]
+
+        client = HinenApiClient(session, _token_provider)
+        try:
+            devices = await client.async_get_devices()
+        except Exception as err:  # noqa: BLE001 - surfaced as an abort reason
+            _LOGGER.error("Error verifying Hinen devices: %s", err)
+            return self.async_abort(reason="cannot_connect")
+
+        if not devices:
+            return self.async_abort(reason="no_devices")
+
+        await self.async_set_unique_id(str(devices[0]["id"]))
+        if self.source == SOURCE_REAUTH:
+            self._abort_if_unique_id_mismatch(reason="wrong_account")
+            return self.async_update_reload_and_abort(
+                self._get_reauth_entry(), data=data
+            )
+        self._abort_if_unique_id_configured()
+        title = devices[0].get("deviceName") or "Hinen Solar Advanced"
+        return self.async_create_entry(title=title, data=data)
+
+    async def async_step_reauth(
+        self, entry_data: Mapping[str, Any]
+    ) -> ConfigFlowResult:
+        """Handle re-authentication when the stored token becomes invalid."""
+        return await self.async_step_reauth_confirm()
+
+    async def async_step_reauth_confirm(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
-        """Handle the authorization step."""
-        errors: dict[str, str] = {}
-
-        if user_input is not None:
-            auth_code = user_input.get("authorization_code", "").strip()
-
-            # Check if callback received the code (when user submits empty form)
-            if not auth_code and DOMAIN in self.hass.data:
-                callback_data = self.hass.data[DOMAIN].get("oauth_callback")
-                if callback_data and "authorization_code" in callback_data:
-                    auth_code = callback_data["authorization_code"]
-                    # Clear the callback data
-                    self.hass.data[DOMAIN].pop("oauth_callback", None)
-                    _LOGGER.info("Using authorization code from OAuth callback")
-
-            if not auth_code:
-                errors["base"] = "auth_failed"
-                errors["authorization_code"] = "Please enter the authorization code or complete the OAuth flow"
-            else:
-                session = async_get_clientsession(self.hass)
-                api = HinenApiClient(
-                    session=session,
-                    client_id=self._client_id,
-                    client_secret=self._client_secret,
-                    region_code=self._region_code,
-                )
-
-                try:
-                    # Exchange authorization code for tokens
-                    token_data = await api.async_get_access_token(auth_code)
-
-                    # Verify by fetching devices
-                    devices = await api.async_get_devices()
-
-                    if not devices:
-                        errors["base"] = "no_devices"
-                    else:
-                        # Create config entry
-                        return self.async_create_entry(
-                            title=f"Hinen Solar Advanced ({self._region_code})",
-                            data={
-                                "client_id": self._client_id,
-                                "client_secret": self._client_secret,
-                                "region_code": self._region_code,
-                                "access_token": token_data["access_token"],
-                                "refresh_token": token_data["refresh_token"],
-                                "host": token_data["host"],
-                            },
-                        )
-
-                except Exception as err:
-                    _LOGGER.error("Error during authorization: %s", err)
-                    errors["base"] = "auth_failed"
-
-        return self.async_show_form(
-            step_id="authorize",
-            data_schema=vol.Schema(
-                {
-                    vol.Optional("authorization_code", default=""): str,
-                }
-            ),
-            errors=errors,
-        )
-
-    @staticmethod
-    @callback
-    def async_get_options_flow(
-        config_entry: config_entries.ConfigEntry,
-    ) -> config_entries.OptionsFlow:
-        """Get the options flow for this handler."""
-        return HinenOptionsFlowHandler(config_entry)
-
-
-class HinenOptionsFlowHandler(config_entries.OptionsFlow):
-    """Handle options flow for Hinen Solar."""
-
-    def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
-        """Initialize options flow."""
-        self.config_entry = config_entry
-
-    async def async_step_init(
-        self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
-        """Manage the options."""
-        if user_input is not None:
-            return self.async_create_entry(title="", data=user_input)
-
-        return self.async_show_form(
-            step_id="init",
-            data_schema=vol.Schema(
-                {
-                    vol.Optional(
-                        "scan_interval",
-                        default=self.config_entry.options.get("scan_interval", 60),
-                    ): vol.All(vol.Coerce(int), vol.Range(min=30, max=300)),
-                }
-            ),
-        )
+    ) -> ConfigFlowResult:
+        """Confirm re-authentication, then restart the credential step."""
+        if user_input is None:
+            return self.async_show_form(step_id="reauth_confirm")
+        return await self.async_step_user()

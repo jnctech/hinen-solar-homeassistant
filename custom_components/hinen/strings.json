@@ -2,42 +2,36 @@
   "config": {
     "step": {
       "user": {
-        "title": "Configure Hinen Solar",
-        "description": "Enter your Hinen Developer Platform credentials. You can obtain your Client ID and Client Secret from the Hinen Developer Platform at https://developer.celinksmart.com\n\nThe redirect URL will be auto-detected, but you can customize it if needed (e.g., for external access).",
+        "title": "Hinen Solar Advanced",
+        "description": "Apply for your own Client ID and Client Secret on the Hinen Developer Portal: {portal_url}\n\nEnter the redirect address as the base URL of this Home Assistant instance (no trailing slash). After you submit, you'll be sent to Hinen to choose your region and sign in.",
         "data": {
+          "auth_language": "Authorization page language",
           "client_id": "Client ID",
           "client_secret": "Client Secret",
-          "region_code": "Region Code",
-          "redirect_url": "OAuth Redirect URL (optional)"
+          "redirect_base": "Home Assistant address (redirect)"
         }
       },
-      "authorize": {
-        "title": "Authorize Hinen Solar",
-        "description": "1. Click this link to authorize: {auth_url}\n\n2. After authorizing, you will be redirected back to: {redirect_url}\n\n3. Return here and click Submit (leave field empty to auto-detect)\n\nOr manually enter the authorization code if auto-detection fails.",
-        "data": {
-          "authorization_code": "Authorization Code (leave empty for auto-detect)"
-        }
+      "reauth_confirm": {
+        "title": "Reauthenticate Hinen Solar Advanced",
+        "description": "Your Hinen authorization needs to be renewed. Select Submit to sign in again."
       }
-    },
-    "error": {
-      "auth_failed": "Authentication failed. Please check your credentials and authorization code.",
-      "no_devices": "No devices found. Please ensure your devices are registered in the Hinen platform.",
-      "cannot_connect": "Unable to connect to Hinen servers. Please check your internet connection.",
-      "unknown": "An unknown error occurred."
     },
     "abort": {
       "already_configured": "This Hinen account is already configured.",
-      "conflict_with_official": "⚠️ Integration Conflict Detected\n\nThe official {integration_name} integration is already installed. Due to API session limitations, both integrations cannot run simultaneously on the same Hinen account.\n\nOptions:\n1. Use only Hinen Solar Advanced (remove Hinen Power first)\n2. Use only Hinen Power (cancel this setup)\n3. Use separate Hinen accounts (share devices between accounts)\n\nFor more information, see: https://github.com/jnctech/hinen-solar-homeassistant#compatibility"
-    }
-  },
-  "options": {
-    "step": {
-      "init": {
-        "title": "Hinen Solar Options",
-        "data": {
-          "scan_interval": "Update interval (seconds)"
-        }
-      }
+      "cannot_connect": "Unable to connect to the Hinen servers. Please try again.",
+      "no_devices": "No devices were found on this Hinen account.",
+      "wrong_account": "The authorized account does not match the one being reauthenticated.",
+      "missing_configuration": "The integration is not configured. Please follow the documentation.",
+      "authorize_url_timeout": "Timeout generating the authorization URL.",
+      "authorize_url_fail": "Unknown error generating the authorization URL.",
+      "oauth_error": "Received invalid data during authorization.",
+      "oauth_failed": "Error while obtaining the access token.",
+      "oauth_timeout": "Timeout obtaining the access token.",
+      "oauth_unauthorized": "OAuth authorization error while obtaining the access token.",
+      "user_rejected_authorize": "Authorization was rejected: {error}"
+    },
+    "create_entry": {
+      "default": "Successfully authenticated with Hinen."
     }
   }
 }
