@@ -4,7 +4,7 @@ Monitoring **and control** for Hinen solar inverters, PV, and battery storage vi
 the Hinen Open API. You supply your own developer Client ID/Secret — nothing is
 shared or hard-coded.
 
-- **67 sensors** — PV strings, external/AC-coupled PV (e.g. a Solis on the PV
+- **69 sensors** — PV strings, external/AC-coupled PV (e.g. a Solis on the PV
   meter), grid, battery, temperatures, the full energy-flow matrix, daily &
   lifetime energy, solar yield, and battery health (SOH, cell voltages/temps).
 - **7 controls** — work-mode selector + SOC-limit and charge/discharge-power

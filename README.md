@@ -8,7 +8,7 @@ Monitoring **and control** for Hinen solar inverters, PV systems, and battery
 storage, via the Hinen Open API (`celinksmart.com`). Cloud-polling; you bring your
 own developer credentials, so nothing is hard-coded or shared.
 
-- **67 sensors** — PV strings, external/AC-coupled PV (e.g. a Solis on the Hinen PV
+- **69 sensors** — PV strings, external/AC-coupled PV (e.g. a Solis on the Hinen PV
   meter), grid, battery, temperatures, the full energy-flow matrix, daily/lifetime
   energy, solar **yield**, and battery health (SOH, cell voltages/temps).
 - **7 controls** — work-mode selector plus SOC-limit and charge/discharge-power
@@ -73,7 +73,10 @@ temperature·SOC, inverter/DC-DC temperatures, the power-flow matrix
 (PV→battery/load/grid, grid→load/battery, battery→load/grid), daily & lifetime
 energy for each flow, **Daily Yield** / **Total Yield**, and battery health
 diagnostics (SOH, pack quantity, cell min/max voltage & temperature, ISO
-resistance, power factor). Two binary sensors: online status, battery charging.
+resistance, power factor), plus **Alert Status** (`normal`/`alarm`/`error`) and
+**Status** (`normal`/`off`/`sleep`) as enums. Three binary sensors: online status,
+battery charging, and **Problem** — on when the inverter reports an alarm or error,
+which connectivity alone cannot see.
 
 **Controls** (per device): **Work Mode** (Self-use / Battery priority / Feed-in /
 Time of use / Power-saving) and setpoint numbers — Max Charge SOC, Forced Charge
