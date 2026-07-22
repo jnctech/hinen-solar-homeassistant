@@ -1,4 +1,5 @@
 """Binary sensor platform for Hinen Solar."""
+
 from __future__ import annotations
 
 from collections.abc import Callable

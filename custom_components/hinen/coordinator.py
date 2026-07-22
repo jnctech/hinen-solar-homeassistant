@@ -1,4 +1,5 @@
 """DataUpdateCoordinator for Hinen Solar."""
+
 from __future__ import annotations
 
 import logging
@@ -52,15 +53,11 @@ class HinenDataUpdateCoordinator(DataUpdateCoordinator):
                         "firmware_version": device_info.get("firmwareVersion"),
                         "status": device_info.get("status"),
                         "alert_status": device_info.get("alertStatus"),
-                        "properties": self._parse_properties(
-                            device_info.get("properties", [])
-                        ),
+                        "properties": self._parse_properties(device_info.get("properties", [])),
                     }
 
                 except Exception as err:
-                    _LOGGER.error(
-                        "Error fetching data for device %s: %s", device_id, err
-                    )
+                    _LOGGER.error("Error fetching data for device %s: %s", device_id, err)
                     continue
 
             self.devices = device_data
@@ -69,9 +66,7 @@ class HinenDataUpdateCoordinator(DataUpdateCoordinator):
         except Exception as err:
             raise UpdateFailed(f"Error communicating with API: {err}") from err
 
-    def _parse_properties(
-        self, properties: list[dict[str, Any]]
-    ) -> dict[str, Any]:
+    def _parse_properties(self, properties: list[dict[str, Any]]) -> dict[str, Any]:
         """Parse properties array into a dictionary."""
         parsed = {}
         for prop in properties:
@@ -87,9 +82,7 @@ class HinenDataUpdateCoordinator(DataUpdateCoordinator):
                 }
         return parsed
 
-    def get_device_property(
-        self, device_id: str, property_id: str
-    ) -> Any | None:
+    def get_device_property(self, device_id: str, property_id: str) -> Any | None:
         """Get a specific property value for a device."""
         device = self.devices.get(device_id)
         if not device:

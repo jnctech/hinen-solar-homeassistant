@@ -6,6 +6,7 @@ We therefore override the authorize-URL builder and the token exchange/refresh o
 HA's ``AuthImplementation``. The token requests are our own code — no third-party
 Hinen client library is used.
 """
+
 from __future__ import annotations
 
 import logging
@@ -14,13 +15,12 @@ from typing import Any, cast
 
 import jwt
 from aiohttp import ClientResponse, web
-from yarl import URL
-
 from homeassistant.components.application_credentials import AuthImplementation
 from homeassistant.components.http import KEY_HASS, HomeAssistantView
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import config_entry_oauth2_flow
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from yarl import URL
 
 from .const import (
     CALLBACK_PATH,
@@ -41,9 +41,7 @@ _REGION_QUERY_KEY = "regionCode"
 class HinenConfigEntryAuth:
     """Supplies a valid access token + data-center host, refreshing as needed."""
 
-    def __init__(
-        self, oauth_session: config_entry_oauth2_flow.OAuth2Session
-    ) -> None:
+    def __init__(self, oauth_session: config_entry_oauth2_flow.OAuth2Session) -> None:
         """Initialize with the entry's OAuth2 session."""
         self._oauth_session = oauth_session
 
@@ -77,9 +75,7 @@ class HinenOAuth2Implementation(AuthImplementation):
         """Build the Hinen authorization URL for the user to open."""
         secret = self.hass.data.get(config_entry_oauth2_flow.DATA_JWT_SECRET)
         if secret is None:
-            secret = self.hass.data[config_entry_oauth2_flow.DATA_JWT_SECRET] = (
-                secrets.token_hex()
-            )
+            secret = self.hass.data[config_entry_oauth2_flow.DATA_JWT_SECRET] = secrets.token_hex()
         state = jwt.encode(
             {"flow_id": flow_id, "redirect_uri": self.redirect_uri},
             secret,
@@ -162,10 +158,7 @@ class HinenOAuth2CallbackView(HomeAssistantView):
         state = _decode_jwt(hass, request.query["state"])
         if state is None:
             return web.Response(
-                text=(
-                    "Invalid state. Is Home Assistant configured with the "
-                    "correct external/internal URL?"
-                ),
+                text=("Invalid state. Is Home Assistant configured with the correct external/internal URL?"),
                 status=400,
             )
 
@@ -178,9 +171,7 @@ class HinenOAuth2CallbackView(HomeAssistantView):
         else:
             return web.Response(text="Missing code or error parameter", status=400)
 
-        await hass.config_entries.flow.async_configure(
-            flow_id=state["flow_id"], user_input=user_input
-        )
+        await hass.config_entries.flow.async_configure(flow_id=state["flow_id"], user_input=user_input)
         return web.Response(
             headers={"content-type": "text/html"},
             text="<script>window.close()</script>You may close this window.",

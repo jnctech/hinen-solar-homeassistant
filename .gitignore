@@ -51,6 +51,7 @@ Thumbs.db
 # Environment
 .env
 venv/
+.venv/
 env/
 ENV/
 
@@ -58,7 +59,9 @@ ENV/
 secret.txt
 *secret*.txt
 *credential*.txt
-test_*.py
+# Root-level throwaway test scripts (may hold creds). Anchored to root so it does
+# NOT match the committed test suite under tests/.
+/test_*.py
 *_creds.*
 *.env
 solartrack/

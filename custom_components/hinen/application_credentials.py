@@ -1,4 +1,5 @@
 """Application Credentials platform for Hinen Solar."""
+
 from homeassistant.components.application_credentials import (
     AuthorizationServer,
     ClientCredential,

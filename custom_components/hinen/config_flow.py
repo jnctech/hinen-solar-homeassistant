@@ -1,4 +1,5 @@
 """Config flow for the Hinen Solar integration."""
+
 from __future__ import annotations
 
 import logging
@@ -6,7 +7,6 @@ from collections.abc import Mapping
 from typing import Any
 
 import voluptuous as vol
-
 from homeassistant.components.application_credentials import ClientCredential
 from homeassistant.config_entries import SOURCE_REAUTH, ConfigFlowResult
 from homeassistant.const import CONF_CLIENT_ID, CONF_CLIENT_SECRET, CONF_TOKEN
@@ -28,9 +28,7 @@ from .oauth2 import HinenOAuth2CallbackView
 _LOGGER = logging.getLogger(__name__)
 
 
-class HinenOAuth2FlowHandler(
-    config_entry_oauth2_flow.AbstractOAuth2FlowHandler, domain=DOMAIN
-):
+class HinenOAuth2FlowHandler(config_entry_oauth2_flow.AbstractOAuth2FlowHandler, domain=DOMAIN):
     """Handle the Hinen Solar OAuth2 config flow."""
 
     DOMAIN = DOMAIN
@@ -40,36 +38,24 @@ class HinenOAuth2FlowHandler(
         """Return the logger for the flow."""
         return _LOGGER
 
-    async def async_step_user(
-        self, user_input: dict[str, Any] | None = None
-    ) -> ConfigFlowResult:
+    async def async_step_user(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Collect credentials, then hand off to the OAuth authorize step."""
         if user_input is not None:
-            credential = ClientCredential(
-                user_input[CONF_CLIENT_ID], user_input[CONF_CLIENT_SECRET]
-            )
-            implementation = (
-                await application_credentials.async_get_auth_implementation(
-                    self.hass, DOMAIN, credential
-                )
-            )
+            credential = ClientCredential(user_input[CONF_CLIENT_ID], user_input[CONF_CLIENT_SECRET])
+            implementation = await application_credentials.async_get_auth_implementation(self.hass, DOMAIN, credential)
             implementation.auth_language = user_input[CONF_AUTH_LANGUAGE]
             implementation.redirect_base = user_input[CONF_REDIRECT_BASE]
 
             self.hass.http.register_view(HinenOAuth2CallbackView())
             self.flow_impl = implementation
-            config_entry_oauth2_flow.async_register_implementation(
-                self.hass, DOMAIN, implementation
-            )
+            config_entry_oauth2_flow.async_register_implementation(self.hass, DOMAIN, implementation)
             return await self.async_step_auth()
 
         return self.async_show_form(
             step_id="user",
             data_schema=vol.Schema(
                 {
-                    vol.Required(CONF_AUTH_LANGUAGE, default="en_US"): vol.In(
-                        SUPPORTED_LANGUAGES
-                    ),
+                    vol.Required(CONF_AUTH_LANGUAGE, default="en_US"): vol.In(SUPPORTED_LANGUAGES),
                     vol.Required(CONF_CLIENT_ID): str,
                     vol.Required(CONF_CLIENT_SECRET): str,
                     vol.Required(
@@ -102,22 +88,16 @@ class HinenOAuth2FlowHandler(
         await self.async_set_unique_id(str(devices[0]["id"]))
         if self.source == SOURCE_REAUTH:
             self._abort_if_unique_id_mismatch(reason="wrong_account")
-            return self.async_update_reload_and_abort(
-                self._get_reauth_entry(), data=data
-            )
+            return self.async_update_reload_and_abort(self._get_reauth_entry(), data=data)
         self._abort_if_unique_id_configured()
         title = devices[0].get("deviceName") or "Hinen Solar Advanced"
         return self.async_create_entry(title=title, data=data)
 
-    async def async_step_reauth(
-        self, entry_data: Mapping[str, Any]
-    ) -> ConfigFlowResult:
+    async def async_step_reauth(self, entry_data: Mapping[str, Any]) -> ConfigFlowResult:
         """Handle re-authentication when the stored token becomes invalid."""
         return await self.async_step_reauth_confirm()
 
-    async def async_step_reauth_confirm(
-        self, user_input: dict[str, Any] | None = None
-    ) -> ConfigFlowResult:
+    async def async_step_reauth_confirm(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Confirm re-authentication, then restart the credential step."""
         if user_input is None:
             return self.async_show_form(step_id="reauth_confirm")

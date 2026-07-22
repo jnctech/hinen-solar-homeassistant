@@ -1,0 +1,19 @@
+# Tooling config only — this project is a Home Assistant custom integration,
+# not a distributable package.
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["B011"]
+
+[tool.coverage.run]
+source = ["custom_components/hinen"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 75

@@ -1,4 +1,5 @@
 """Sensor platform for Hinen Solar."""
+
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -588,9 +589,7 @@ class HinenSensor(CoordinatorEntity, SensorEntity):
     @property
     def native_value(self) -> Any:
         """Return the state of the sensor."""
-        value = self.coordinator.get_device_property(
-            self._device_id, self.entity_description.key
-        )
+        value = self.coordinator.get_device_property(self._device_id, self.entity_description.key)
 
         # Return None if value doesn't exist
         if value is None:

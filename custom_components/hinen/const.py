@@ -9,9 +9,7 @@ LOGGER = logging.getLogger(__package__)
 
 # OAuth2 endpoints (verified against Hinen's own integration + developer portal).
 OAUTH_AUTHORIZE_URL = "https://global.knowledge.celinksmart.com/#/auth"
-OAUTH_TOKEN_URL = (
-    "https://global.iot-api.celinksmart.com/iot-global/open-platforms/auth/token"
-)
+OAUTH_TOKEN_URL = "https://global.iot-api.celinksmart.com/iot-global/open-platforms/auth/token"
 
 # Local path the Hinen OAuth page redirects back to. Namespaced with "_solar" so
 # it never collides with the official hinen_power integration's /auth/hinen/callback.

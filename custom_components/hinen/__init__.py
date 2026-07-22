@@ -1,10 +1,10 @@
 """The Hinen Solar integration."""
+
 from __future__ import annotations
 
 import logging
 
 from aiohttp import ClientError, ClientResponseError
-
 from homeassistant.components.application_credentials import ClientCredential
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_TOKEN, Platform
@@ -28,14 +28,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Hinen Solar from a config entry."""
     token = entry.data[CONF_TOKEN]
     credential = ClientCredential(token[TOKEN_CLIENT_ID], token[TOKEN_CLIENT_SECRET])
-    implementation = await application_credentials.async_get_auth_implementation(
-        hass, DOMAIN, credential
-    )
+    implementation = await application_credentials.async_get_auth_implementation(hass, DOMAIN, credential)
     config_entry_oauth2_flow.async_register_implementation(hass, DOMAIN, implementation)
 
-    impl = await config_entry_oauth2_flow.async_get_config_entry_implementation(
-        hass, entry
-    )
+    impl = await config_entry_oauth2_flow.async_get_config_entry_implementation(hass, entry)
     oauth_session = config_entry_oauth2_flow.OAuth2Session(hass, entry, impl)
     auth = HinenConfigEntryAuth(oauth_session)
 
@@ -43,16 +39,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         await auth.check_and_refresh_token()
     except ClientResponseError as err:
         if 400 <= err.status < 500:
-            raise ConfigEntryAuthFailed(
-                "Hinen token is no longer valid; reauthentication required"
-            ) from err
+            raise ConfigEntryAuthFailed("Hinen token is no longer valid; reauthentication required") from err
         raise ConfigEntryNotReady from err
     except ClientError as err:
         raise ConfigEntryNotReady from err
 
-    client = HinenApiClient(
-        async_get_clientsession(hass), auth.async_get_token_and_host
-    )
+    client = HinenApiClient(async_get_clientsession(hass), auth.async_get_token_and_host)
     coordinator = HinenDataUpdateCoordinator(hass, client)
     await coordinator.async_config_entry_first_refresh()
 

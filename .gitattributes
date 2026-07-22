@@ -1,0 +1,8 @@
+# Normalise all text to LF in the repo so CI (Linux) and ruff format agree
+# regardless of the contributor's OS.
+* text=auto eol=lf
+*.py text eol=lf
+*.json text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.md text eol=lf

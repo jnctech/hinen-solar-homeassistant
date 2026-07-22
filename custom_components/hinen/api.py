@@ -5,6 +5,7 @@ the supplied ``token_provider`` for a fresh ``(access_token, host)`` before ever
 request, so token refresh is transparent here and no credentials are stored on
 the client itself.
 """
+
 from __future__ import annotations
 
 import logging
@@ -41,17 +42,12 @@ class HinenApiClient:
         headers = kwargs.pop("headers", {})
         headers["Authorization"] = access_token
 
-        async with self._session.request(
-            method, url, headers=headers, **kwargs
-        ) as response:
+        async with self._session.request(method, url, headers=headers, **kwargs) as response:
             response.raise_for_status()
             data = await response.json()
 
         if data.get("code") != API_SUCCESS_CODE:
-            raise HinenApiError(
-                f"Hinen API {method} {endpoint} failed "
-                f"({data.get('code')}): {data.get('msg')}"
-            )
+            raise HinenApiError(f"Hinen API {method} {endpoint} failed ({data.get('code')}): {data.get('msg')}")
         return data.get("data")
 
     async def async_get_devices(self) -> list[dict[str, Any]]:
@@ -60,15 +56,9 @@ class HinenApiClient:
 
     async def async_get_device_info(self, device_id: str) -> dict[str, Any]:
         """Return detailed device info, including the properties array."""
-        return await self._request(
-            "GET", f"/iot-device/open-api/devices/info/{device_id}"
-        )
+        return await self._request("GET", f"/iot-device/open-api/devices/info/{device_id}")
 
-    async def async_set_device_property(
-        self, device_id: str, properties: dict[str, Any]
-    ) -> Any:
+    async def async_set_device_property(self, device_id: str, properties: dict[str, Any]) -> Any:
         """Set one or more writable device properties."""
         payload = {"deviceId": device_id, "map": properties}
-        return await self._request(
-            "PUT", "/iot-device/open-api/devices/property_set", json=payload
-        )
+        return await self._request("PUT", "/iot-device/open-api/devices/property_set", json=payload)
