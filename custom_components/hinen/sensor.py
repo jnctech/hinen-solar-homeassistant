@@ -12,7 +12,6 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
     SensorStateClass,
 )
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     PERCENTAGE,
     UnitOfApparentPower,
@@ -29,7 +28,9 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
-from .coordinator import HinenDataUpdateCoordinator
+from .coordinator import HinenConfigEntry, HinenDataUpdateCoordinator
+
+PARALLEL_UPDATES = 0
 
 
 @dataclass
@@ -540,11 +541,11 @@ SENSOR_DESCRIPTIONS: tuple[HinenSensorEntityDescription, ...] = (
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: ConfigEntry,
+    entry: HinenConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Hinen Solar sensor based on a config entry."""
-    coordinator: HinenDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator: HinenDataUpdateCoordinator = entry.runtime_data
 
     entities: list[HinenSensor] = []
 

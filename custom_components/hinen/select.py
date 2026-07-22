@@ -3,15 +3,16 @@
 from __future__ import annotations
 
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN, WORK_MODE_OPTIONS
-from .coordinator import HinenDataUpdateCoordinator
+from .const import WORK_MODE_OPTIONS
+from .coordinator import HinenConfigEntry, HinenDataUpdateCoordinator
 from .entity import HinenControlEntity
+
+PARALLEL_UPDATES = 1
 
 # option label -> device enum value
 _LABEL_TO_VALUE = {label: value for value, label in WORK_MODE_OPTIONS.items()}
@@ -26,11 +27,11 @@ WORK_MODE_DESCRIPTION = SelectEntityDescription(
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: ConfigEntry,
+    entry: HinenConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up the Hinen work-mode select."""
-    coordinator: HinenDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator: HinenDataUpdateCoordinator = entry.runtime_data
     async_add_entities(
         HinenWorkModeSelect(coordinator, device_id, WORK_MODE_DESCRIPTION) for device_id in coordinator.devices
     )

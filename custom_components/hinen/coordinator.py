@@ -6,6 +6,7 @@ import logging
 from datetime import timedelta
 from typing import Any
 
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
@@ -14,6 +15,8 @@ from .api import HinenApiClient, HinenApiError
 from .const import DEFAULT_SCAN_INTERVAL, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
+
+type HinenConfigEntry = ConfigEntry[HinenDataUpdateCoordinator]
 
 
 class HinenDataUpdateCoordinator(DataUpdateCoordinator):

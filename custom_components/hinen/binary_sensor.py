@@ -11,13 +11,14 @@ from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
     BinarySensorEntityDescription,
 )
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, STATUS_ONLINE
-from .coordinator import HinenDataUpdateCoordinator
+from .coordinator import HinenConfigEntry, HinenDataUpdateCoordinator
+
+PARALLEL_UPDATES = 0
 
 
 @dataclass
@@ -52,11 +53,11 @@ BINARY_SENSOR_DESCRIPTIONS: tuple[HinenBinarySensorEntityDescription, ...] = (
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: ConfigEntry,
+    entry: HinenConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Hinen Solar binary sensor based on a config entry."""
-    coordinator: HinenDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator: HinenDataUpdateCoordinator = entry.runtime_data
 
     entities: list[HinenBinarySensor] = []
 

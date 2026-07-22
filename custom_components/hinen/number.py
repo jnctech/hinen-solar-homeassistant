@@ -10,15 +10,15 @@ from homeassistant.components.number import (
     NumberEntityDescription,
     NumberMode,
 )
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import PERCENTAGE, UnitOfPower
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN
-from .coordinator import HinenDataUpdateCoordinator
+from .coordinator import HinenConfigEntry, HinenDataUpdateCoordinator
 from .entity import HinenControlEntity
+
+PARALLEL_UPDATES = 1
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -101,11 +101,11 @@ NUMBER_DESCRIPTIONS: tuple[HinenNumberEntityDescription, ...] = (
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: ConfigEntry,
+    entry: HinenConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Hinen number controls."""
-    coordinator: HinenDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator: HinenDataUpdateCoordinator = entry.runtime_data
     async_add_entities(
         HinenNumber(coordinator, device_id, description)
         for device_id in coordinator.devices
