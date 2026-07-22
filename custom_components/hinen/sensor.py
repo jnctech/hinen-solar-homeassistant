@@ -27,7 +27,7 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import DOMAIN
+from .const import ALERT_STATUS_OPTIONS, DOMAIN
 from .coordinator import HinenConfigEntry, HinenDataUpdateCoordinator
 
 PARALLEL_UPDATES = 0
@@ -38,6 +38,9 @@ class HinenSensorEntityDescription(SensorEntityDescription):
     """Describes Hinen sensor entity."""
 
     value_fn: Callable[[dict[str, Any]], Any] | None = None
+    # Reads from the device record instead of its property list, for device-level
+    # fields such as alert status that don't appear under `properties`.
+    device_fn: Callable[[dict[str, Any]], Any] | None = None
 
 
 SENSOR_DESCRIPTIONS: tuple[HinenSensorEntityDescription, ...] = (
@@ -536,6 +539,18 @@ SENSOR_DESCRIPTIONS: tuple[HinenSensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
     ),
+    # Device-level fault state. Connectivity alone can't see a faulted but
+    # reachable inverter, so this restores the fault visibility the legacy
+    # hinen_power integration exposed as `sensor.<device>_alert_status`.
+    HinenSensorEntityDescription(
+        key="alert_status",
+        name="Alert Status",
+        translation_key="alert_status",
+        device_class=SensorDeviceClass.ENUM,
+        options=list(ALERT_STATUS_OPTIONS.values()),
+        entity_category=EntityCategory.DIAGNOSTIC,
+        device_fn=lambda device: ALERT_STATUS_OPTIONS.get(device.get("alert_status")),
+    ),
 )
 
 
@@ -591,6 +606,9 @@ class HinenSensor(CoordinatorEntity, SensorEntity):
     @property
     def native_value(self) -> Any:
         """Return the state of the sensor."""
+        if self.entity_description.device_fn:
+            return self.entity_description.device_fn(self.coordinator.devices.get(self._device_id, {}))
+
         value = self.coordinator.get_device_property(self._device_id, self.entity_description.key)
 
         # Return None if value doesn't exist

@@ -16,6 +16,11 @@
   **Entity IDs are unchanged.**
 
 ### Added
+- **Inverter fault visibility.** `sensor.<device>_alert_status` (enum:
+  `normal` / `alarm` / `error`) and `binary_sensor.<device>_problem`. The connectivity
+  sensor cannot see a faulted-but-reachable inverter, so faults were previously
+  invisible; the alert state was already fetched from the API but never exposed.
+  `alert_status` matches the entity ID the legacy `hinen_power` integration used.
 - **Diagnostics** (device page → Download diagnostics), with OAuth tokens, client id
   and secret, serial number and device id redacted.
 - README: a configuration-parameters reference, plus Troubleshooting and Removal

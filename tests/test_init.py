@@ -54,6 +54,48 @@ async def test_unload_entry(hass: HomeAssistant, aioclient_mock, mock_config_ent
     assert mock_config_entry.state is ConfigEntryState.NOT_LOADED
 
 
+async def test_alert_status_and_problem_entities(
+    hass: HomeAssistant, aioclient_mock, mock_config_entry: MockConfigEntry
+) -> None:
+    """Device-level fault state is exposed; a healthy device reports no problem."""
+    aioclient_mock.get(DEVICES_URL, json=DEVICES_RESPONSE)
+    aioclient_mock.get(DEVICE_INFO_URL, json=DEVICE_INFO_RESPONSE)
+
+    await _setup(hass, mock_config_entry)
+
+    # Fixture alertStatus = 0 -> normal.
+    alert = hass.states.get("sensor.single_phase_hybrid_inverter_alert_status")
+    assert alert is not None
+    assert alert.state == "normal"
+
+    problem = hass.states.get("binary_sensor.single_phase_hybrid_inverter_problem")
+    assert problem is not None
+    assert problem.state == "off"
+
+
+async def test_faulted_but_reachable_device_reports_problem(
+    hass: HomeAssistant, aioclient_mock, mock_config_entry: MockConfigEntry
+) -> None:
+    """A faulted yet online inverter must not read as healthy.
+
+    Connectivity alone cannot see this case, which is why the fault state is
+    surfaced separately.
+    """
+    faulted = {
+        **DEVICE_INFO_RESPONSE,
+        "data": {**DEVICE_INFO_RESPONSE["data"], "alertStatus": 2},
+    }
+    aioclient_mock.get(DEVICES_URL, json=DEVICES_RESPONSE)
+    aioclient_mock.get(DEVICE_INFO_URL, json=faulted)
+
+    await _setup(hass, mock_config_entry)
+
+    assert hass.states.get("sensor.single_phase_hybrid_inverter_alert_status").state == "error"
+    assert hass.states.get("binary_sensor.single_phase_hybrid_inverter_problem").state == "on"
+    # Still reachable — the connectivity sensor stays on, so it alone would miss the fault.
+    assert hass.states.get("binary_sensor.single_phase_hybrid_inverter_online_status").state == "on"
+
+
 async def test_missing_property_is_unknown(
     hass: HomeAssistant, aioclient_mock, mock_config_entry: MockConfigEntry
 ) -> None:

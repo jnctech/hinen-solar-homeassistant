@@ -46,6 +46,16 @@ STATUS_OFFLINE = 0
 STATUS_ONLINE = 1
 STATUS_HIBERNATE = 2
 
+# Device-level fault/alarm state (`alertStatus`) — device value -> option slug.
+# Values match the legacy `hinen_power` integration (0 NORMAL / 1 ALARM / 2 ERROR).
+# Slugs, not labels: automations bind to these (see WORK_MODE_OPTIONS below).
+ALERT_STATUS_NORMAL = 0
+ALERT_STATUS_OPTIONS = {
+    0: "normal",
+    1: "alarm",
+    2: "error",
+}
+
 # Writable work-mode enum (WorkModeSetting property) — device value -> HA option slug.
 # The slugs deliberately match the legacy `hinen_power` integration's for the same
 # device values, so automations written against it keep working unchanged. Friendly

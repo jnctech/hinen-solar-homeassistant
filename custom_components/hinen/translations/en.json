@@ -46,6 +46,16 @@
           "power_keeping": "Power-saving"
         }
       }
+    },
+    "sensor": {
+      "alert_status": {
+        "name": "Alert Status",
+        "state": {
+          "normal": "Normal",
+          "alarm": "Alarm",
+          "error": "Error"
+        }
+      }
     }
   }
 }

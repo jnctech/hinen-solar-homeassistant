@@ -15,7 +15,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import DOMAIN, STATUS_ONLINE
+from .const import ALERT_STATUS_NORMAL, DOMAIN, STATUS_ONLINE
 from .coordinator import HinenConfigEntry, HinenDataUpdateCoordinator
 
 PARALLEL_UPDATES = 0
@@ -47,6 +47,15 @@ BINARY_SENSOR_DESCRIPTIONS: tuple[HinenBinarySensorEntityDescription, ...] = (
         key="battery_charging",
         name="Battery Charging",
         device_class=BinarySensorDeviceClass.BATTERY_CHARGING,
+    ),
+    # Faulted-but-reachable inverters are invisible to the connectivity sensor,
+    # so surface the device's alarm/error state as a problem for alerting.
+    # Unknown (None) is deliberately not a problem.
+    HinenBinarySensorEntityDescription(
+        key="problem",
+        name="Problem",
+        device_class=BinarySensorDeviceClass.PROBLEM,
+        value_fn=lambda device: device.get("alert_status") not in (None, ALERT_STATUS_NORMAL),
     ),
 )
 
@@ -103,14 +112,11 @@ class HinenBinarySensor(CoordinatorEntity, BinarySensorEntity):
     @property
     def is_on(self) -> bool:
         """Return true if the binary sensor is on."""
-        if self.entity_description.key == "online":
-            # Use the value_fn for online status
-            device_data = self.coordinator.devices.get(self._device_id, {})
-            if self.entity_description.value_fn:
-                return self.entity_description.value_fn(device_data)
-            return False
+        if self.entity_description.value_fn:
+            # Device-record backed (online status, problem/fault state).
+            return self.entity_description.value_fn(self.coordinator.devices.get(self._device_id, {}))
 
-        elif self.entity_description.key == "battery_charging":
+        if self.entity_description.key == "battery_charging":
             # Check battery power to determine charging state
             return is_battery_charging(self.coordinator, self._device_id)
 
