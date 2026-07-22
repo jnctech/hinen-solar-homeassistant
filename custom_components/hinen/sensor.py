@@ -288,6 +288,117 @@ SENSOR_DESCRIPTIONS: tuple[HinenSensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
     ),
+    # External / metered PV generation (e.g. an AC-coupled inverter such as a
+    # Solis measured by the Hinen PV meter). GenerationPower = PV1+PV2 + this.
+    HinenSensorEntityDescription(
+        key="PmeterPV",
+        name="PV Meter Power",
+        device_class=SensorDeviceClass.POWER,
+        native_unit_of_measurement=UnitOfPower.WATT,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    HinenSensorEntityDescription(
+        key="PVPercentPower",
+        name="PV Output Percent",
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+    ),
+    # Power-flow matrix (instantaneous routing between PV / grid / battery / load)
+    HinenSensorEntityDescription(
+        key="PvToBatteryPower",
+        name="PV to Battery Power",
+        device_class=SensorDeviceClass.POWER,
+        native_unit_of_measurement=UnitOfPower.WATT,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    HinenSensorEntityDescription(
+        key="PvToLoadPower",
+        name="PV to Load Power",
+        device_class=SensorDeviceClass.POWER,
+        native_unit_of_measurement=UnitOfPower.WATT,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    HinenSensorEntityDescription(
+        key="PvToGridPower",
+        name="PV to Grid Power",
+        device_class=SensorDeviceClass.POWER,
+        native_unit_of_measurement=UnitOfPower.WATT,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    HinenSensorEntityDescription(
+        key="GridToLoadPower",
+        name="Grid to Load Power",
+        device_class=SensorDeviceClass.POWER,
+        native_unit_of_measurement=UnitOfPower.WATT,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    HinenSensorEntityDescription(
+        key="GridToBatteryPower",
+        name="Grid to Battery Power",
+        device_class=SensorDeviceClass.POWER,
+        native_unit_of_measurement=UnitOfPower.WATT,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    HinenSensorEntityDescription(
+        key="BatteryToLoadPower",
+        name="Battery to Load Power",
+        device_class=SensorDeviceClass.POWER,
+        native_unit_of_measurement=UnitOfPower.WATT,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    HinenSensorEntityDescription(
+        key="BatteryToGridPower",
+        name="Battery to Grid Power",
+        device_class=SensorDeviceClass.POWER,
+        native_unit_of_measurement=UnitOfPower.WATT,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    # PV-routing energy — Daily (resets at midnight) and lifetime Total.
+    HinenSensorEntityDescription(
+        key="DailyPvToLoadEnergy",
+        name="Daily PV to Load",
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
+    HinenSensorEntityDescription(
+        key="DailyPvToGridEnergy",
+        name="Daily PV to Grid",
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
+    HinenSensorEntityDescription(
+        key="DailyPvToBatteryEnergy",
+        name="Daily PV to Battery",
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
+    # NB: identifier "TotalPvToLoadPower" is a Hinen misnomer — it is cumulative
+    # energy in kWh (name: "Total PV energy supplied to the load"), not power.
+    HinenSensorEntityDescription(
+        key="TotalPvToLoadPower",
+        name="Total PV to Load",
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
+    HinenSensorEntityDescription(
+        key="TotalPvToGridEnergy",
+        name="Total PV to Grid",
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
+    HinenSensorEntityDescription(
+        key="TotalPvToBatteryEnergy",
+        name="Total PV to Battery",
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
 )
 
 
