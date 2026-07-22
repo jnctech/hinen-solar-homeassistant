@@ -32,6 +32,8 @@ class HinenDataUpdateCoordinator(DataUpdateCoordinator):
         )
         self.api = api
         self.devices: dict[str, dict[str, Any]] = {}
+        # Devices currently failing, so an outage is logged once rather than every poll.
+        self._unavailable_devices: set[str] = set()
 
     async def _async_update_data(self) -> dict[str, Any]:
         """Fetch data from API."""
@@ -61,8 +63,18 @@ class HinenDataUpdateCoordinator(DataUpdateCoordinator):
                     }
 
                 except Exception as err:
-                    _LOGGER.error("Error fetching data for device %s: %s", device_id, err)
+                    # Log once when a device goes away and keep repeats at debug, so
+                    # one that stays offline can't flood the log on every poll.
+                    if device_id in self._unavailable_devices:
+                        _LOGGER.debug("Device %s still unavailable: %s", device_id, err)
+                    else:
+                        self._unavailable_devices.add(device_id)
+                        _LOGGER.error("Error fetching data for device %s: %s", device_id, err)
                     continue
+
+                if device_id in self._unavailable_devices:
+                    self._unavailable_devices.discard(device_id)
+                    _LOGGER.info("Device %s is available again", device_id)
 
             self.devices = device_data
             return device_data

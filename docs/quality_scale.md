@@ -21,11 +21,14 @@ doesn't require a premature `quality_scale` manifest claim.)
 - ➖ action-setup, docs-actions — exempt (no service actions)
 
 ## Silver
+All Silver rules are met.
+
 - ✅ action-exceptions (control writes raise), config-entry-unloading,
   docs-configuration-parameters, docs-installation-parameters, entity-unavailable,
-  integration-owner, parallel-updates (0 for read-only platforms, 1 for the control
-  platforms so writes serialise), reauthentication-flow, test-coverage (90%)
-- ⬜ log-when-unavailable
+  integration-owner, log-when-unavailable (a device outage logs once and repeats
+  drop to debug, with a recovery log when it returns), parallel-updates (0 for the
+  read-only platforms, 1 for the control platforms so writes serialise),
+  reauthentication-flow, test-coverage (90%)
 
 ## Gold
 - ✅ devices, diagnostics (OAuth material, serial and device id redacted),
