@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0-rc5
+## 1.0.0 — 2026-07-22
 
 A near-complete rewrite onto a robust, dependency-free architecture, validated
 end-to-end against a live inverter.
