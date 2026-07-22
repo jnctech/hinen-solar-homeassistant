@@ -20,3 +20,5 @@ jobs:
       - uses: hacs/action@main
         with:
           category: integration
+          # Brand assets not yet submitted to home-assistant/brands; ignore until then.
+          ignore: brands
