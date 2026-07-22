@@ -1,7 +1,8 @@
 """Shared fixtures and sample API payloads for the Hinen tests.
 
-Payloads mirror the real Hinen cloud API shapes (captured from a live device) so
-the tests exercise the actual parsing/normalisation paths — no MagicMock stand-ins.
+Payloads mirror the real Hinen cloud API shapes so the tests exercise the actual
+parsing/normalisation paths — no MagicMock stand-ins. Identifiers (device id and
+serial number) are synthetic placeholders, not real hardware.
 """
 
 from __future__ import annotations
