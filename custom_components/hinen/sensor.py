@@ -473,6 +473,66 @@ SENSOR_DESCRIPTIONS: tuple[HinenSensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL_INCREASING,
     ),
+    # Battery health & cell diagnostics
+    HinenSensorEntityDescription(
+        key="SOH",
+        name="Battery Health",
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+    ),
+    HinenSensorEntityDescription(
+        key="NumberOfBatteriesInParallel",
+        name="Battery Pack Quantity",
+        native_unit_of_measurement="packs",
+        entity_category=EntityCategory.DIAGNOSTIC,
+    ),
+    HinenSensorEntityDescription(
+        key="HighestMonomerVoltage",
+        name="Battery Cell Max Voltage",
+        device_class=SensorDeviceClass.VOLTAGE,
+        native_unit_of_measurement=UnitOfElectricPotential.VOLT,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+    ),
+    HinenSensorEntityDescription(
+        key="LowestMonomerVoltage",
+        name="Battery Cell Min Voltage",
+        device_class=SensorDeviceClass.VOLTAGE,
+        native_unit_of_measurement=UnitOfElectricPotential.VOLT,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+    ),
+    HinenSensorEntityDescription(
+        key="BatteryCellMaxTemperature",
+        name="Battery Cell Max Temperature",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+    ),
+    HinenSensorEntityDescription(
+        key="BatteryCellMinTemperature",
+        name="Battery Cell Min Temperature",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+    ),
+    HinenSensorEntityDescription(
+        key="IsoResistance",
+        name="ISO Resistance",
+        native_unit_of_measurement="kΩ",
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+    ),
+    HinenSensorEntityDescription(
+        key="PowerFactor",
+        name="Power Factor",
+        device_class=SensorDeviceClass.POWER_FACTOR,
+        state_class=SensorStateClass.MEASUREMENT,
+        entity_category=EntityCategory.DIAGNOSTIC,
+    ),
 )
 
 
