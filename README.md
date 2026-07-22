@@ -43,6 +43,20 @@ own developer credentials, so nothing is hard-coded or shared.
 4. You’re redirected back; the integration verifies your devices and creates the
    entry. Your region is detected automatically (no dropdown to get wrong).
 
+### Configuration parameters
+
+Everything is configured in the UI — there are no YAML options.
+
+| Parameter | Required | Description |
+| --- | --- | --- |
+| **Authorization page language** | Yes | Language of Hinen’s hosted sign-in page (English or 简体中文). Cosmetic only — it does not change the language of the integration or its entities. Defaults to English. |
+| **Client ID** | Yes | OAuth client identifier issued by the [Hinen Developer Portal](https://developer.celinksmart.com/en_US/feedback). Stored as a Home Assistant Application Credential. |
+| **Client Secret** | Yes | The secret paired with your Client ID. Treat it like a password — never commit it or paste it into an issue or log. If it is ever exposed, regenerate it in the developer portal. |
+| **Home Assistant address** | Yes | Base URL of this instance, with **no trailing slash** (e.g. `http://homeassistant.local:8123`). Hinen redirects back to it after sign-in, so it must be the URL you complete sign-in on *and* be registered as an allowed redirect for your Client ID. |
+
+Once configured, the integration polls every **60 seconds**. The interval is fixed and
+not user-configurable.
+
 ### Compatibility with the official integration
 
 This integration **can run alongside** the official

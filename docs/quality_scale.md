@@ -21,14 +21,16 @@ doesn't require a premature `quality_scale` manifest claim.)
 - ➖ action-setup, docs-actions — exempt (no service actions)
 
 ## Silver
-- ✅ action-exceptions (control writes raise), config-entry-unloading, entity-unavailable,
+- ✅ action-exceptions (control writes raise), config-entry-unloading,
+  docs-configuration-parameters, docs-installation-parameters, entity-unavailable,
   integration-owner, parallel-updates (0 for read-only platforms, 1 for the control
   platforms so writes serialise), reauthentication-flow, test-coverage (90%)
-- ⬜ docs-configuration-parameters, docs-installation-parameters, log-when-unavailable
+- ⬜ log-when-unavailable
 
 ## Gold
-- ✅ devices, entity-category, entity-device-class
-- ⬜ diagnostics, dynamic-devices, entity-disabled-by-default, entity-translations,
+- ✅ devices, diagnostics (OAuth material, serial and device id redacted),
+  entity-category, entity-device-class
+- ⬜ dynamic-devices, entity-disabled-by-default, entity-translations,
   exception-translations, icon-translations, reconfiguration-flow, repair-issues,
   stale-devices, and the docs-* rules
 - ➖ discovery, discovery-update-info — exempt (cloud-polling)
