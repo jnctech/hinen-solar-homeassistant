@@ -45,3 +45,12 @@ DEFAULT_SCAN_INTERVAL = 60
 STATUS_OFFLINE = 0
 STATUS_ONLINE = 1
 STATUS_HIBERNATE = 2
+
+# Writable work-mode enum (WorkModeSetting property) — device value -> HA option.
+WORK_MODE_OPTIONS = {
+    10: "Self-use",
+    11: "Battery priority",
+    12: "Feed-in priority",
+    13: "Time of use",
+    14: "Power-saving",
+}

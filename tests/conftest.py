@@ -19,6 +19,7 @@ HOST = "https://au.iot-api.celinksmart.com"
 DEVICES_URL = f"{HOST}/iot-device/open-api/devices"
 DEVICE_ID = "1000000000000000001"
 DEVICE_INFO_URL = f"{HOST}/iot-device/open-api/devices/info/{DEVICE_ID}"
+PROPERTY_SET_URL = f"{HOST}/iot-device/open-api/devices/property_set"
 
 # --- Stored OAuth token (as persisted in the config entry) --------------------
 STORED_TOKEN = {
@@ -87,6 +88,22 @@ DEVICE_INFO_RESPONSE = {
                 "specs": {"unit": "kWh"},
             },
             {"identifier": "TotalLoadPower", "name": "Load Power", "value": 649, "specs": {"unit": "W"}},
+            {
+                "identifier": "ChargeStopSOC",
+                "name": "Forced Charge Cutoff SOC",
+                "value": 70,
+                "shadow": 70,
+                "datatype": "integer",
+                "specs": {"unit": "%", "min": 10, "max": 100, "step": 1},
+            },
+            {
+                "identifier": "WorkModeSetting",
+                "name": "Work Mode Setting",
+                "value": 10,
+                "shadow": 10,
+                "datatype": "enum",
+                "specs": {"enumList": [{"text": "self", "value": 10}]},
+            },
         ],
     },
 }
