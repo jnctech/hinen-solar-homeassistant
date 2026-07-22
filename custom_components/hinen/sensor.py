@@ -399,6 +399,80 @@ SENSOR_DESCRIPTIONS: tuple[HinenSensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL_INCREASING,
     ),
+    # Total solar yield — THE "Solar production" figure for the Energy Dashboard.
+    # Matches the Hinen app headline "yield"; CumulativeProductionActive spans the
+    # whole array incl. the external Solis's full history (hence >> the PvTo* sums).
+    HinenSensorEntityDescription(
+        key="DailyProductionActive",
+        name="Daily Yield",
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
+    HinenSensorEntityDescription(
+        key="CumulativeProductionActive",
+        name="Total Yield",
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
+    # Energy-flow matrix — Daily + lifetime Total (completes the PvTo* set above).
+    HinenSensorEntityDescription(
+        key="DailyGridToLoadEnergy",
+        name="Daily Grid to Load",
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
+    HinenSensorEntityDescription(
+        key="TotalGridToLoadEnergy",
+        name="Total Grid to Load",
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
+    HinenSensorEntityDescription(
+        key="DailyGridToBatteryEnergy",
+        name="Daily Grid to Battery",
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
+    HinenSensorEntityDescription(
+        key="TotalGridToBatteryEnergy",
+        name="Total Grid to Battery",
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
+    HinenSensorEntityDescription(
+        key="DailyBatteryToLoadEnergy",
+        name="Daily Battery to Load",
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
+    HinenSensorEntityDescription(
+        key="TotalBatteryToLoadEnergy",
+        name="Total Battery to Load",
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
+    HinenSensorEntityDescription(
+        key="DailyBatteryToGridEnergy",
+        name="Daily Battery to Grid",
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
+    HinenSensorEntityDescription(
+        key="TotalBatteryToGridEnergy",
+        name="Total Battery to Grid",
+        device_class=SensorDeviceClass.ENERGY,
+        native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
+        state_class=SensorStateClass.TOTAL_INCREASING,
+    ),
 )
 
 
