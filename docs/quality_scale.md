@@ -13,7 +13,7 @@ doesn't require a premature `quality_scale` manifest claim.)
 - ⬜ **has-entity-name** — entities use explicit names; migrate to `has_entity_name` + translations
 - ⬜ **runtime-data** — coordinator in `hass.data`; migrate to `entry.runtime_data`
 - ⬜ **brands** — submit logo to `home-assistant/brands`
-- ⬜ docs-removal-instructions
+- ✅ docs-removal-instructions
 - ➖ action-setup, docs-actions — exempt (no service actions)
 
 ## Silver

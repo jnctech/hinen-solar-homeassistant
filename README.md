@@ -81,6 +81,36 @@ neither the new value nor its commanded “shadow”, the write raises
 instead of assuming success. Controls display the commanded value immediately while
 the inverter’s reported value catches up on the next poll.
 
+## Troubleshooting
+
+- **Stuck on the Hinen login page, or "redirect URI mismatch".** The **Home
+  Assistant address** you entered must be the exact base URL you reach HA on from
+  the browser where you complete sign-in, with **no trailing slash** — and that
+  same URL must be registered as an allowed redirect/callback for your Client ID in
+  the developer portal. External access (e.g. Nabu Casa) works only if you sign in
+  through that same external URL.
+- **"invalid_grant" / authorization fails after redirect.** The one-time code
+  expired or was reused — start **Add Integration** again and complete sign-in
+  promptly.
+- **No devices found after login.** The Hinen account must have at least one
+  *commissioned* device; a registered-but-uncommissioned inverter returns none.
+- **Token refresh errors in the log.** Re-run the integration's **Reconfigure** /
+  reauthentication flow to mint a fresh token; check the developer-portal
+  credentials are still active.
+
+## Removal
+
+1. **Settings → Devices & Services**, open **Hinen Solar Advanced**, use the ⋮ menu
+   on the integration entry and choose **Delete**. This removes the config entry,
+   its devices, and all entities.
+2. *(Optional)* If you no longer use any integration that relies on them, remove the
+   Hinen **Application Credentials**: **Settings → Devices & Services → ⋮
+   (top-right) → Application Credentials**, then delete the Hinen entry.
+3. *(Optional)* To uninstall the code: HACS → **Hinen Solar Advanced** → **Remove**,
+   then restart Home Assistant.
+
+Deleting the integration does **not** change any settings on the inverter itself.
+
 ## Development
 
 ```bash
