@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.3.0 — 2026-07-22
+
+### Added
+- **Reconfigure flow** — **Settings → Devices & Services → Hinen Solar Advanced →
+  Reconfigure** now lets you enter a new **Client ID** and **Client Secret** on demand.
+
+  Previously credentials could only be replaced via reauthentication, which HA only
+  offers *after* the stored token is rejected. That is too late when you rotate
+  credentials deliberately: the entry keeps the old client id and secret while the
+  current access token carries on working, so there was no way to update them until
+  the integration broke. Re-adding the integration aborts as already-configured, so
+  there was no path at all.
+
+  The existing entry is updated in place and reloaded — entity IDs, history and
+  automations are preserved.
+
 ## 1.2.0 — 2026-07-22
 
 ### Added

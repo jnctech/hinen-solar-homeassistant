@@ -8,7 +8,7 @@ from typing import Any
 
 import voluptuous as vol
 from homeassistant.components.application_credentials import ClientCredential
-from homeassistant.config_entries import SOURCE_REAUTH, ConfigFlowResult
+from homeassistant.config_entries import SOURCE_REAUTH, SOURCE_RECONFIGURE, ConfigFlowResult
 from homeassistant.const import CONF_CLIENT_ID, CONF_CLIENT_SECRET, CONF_TOKEN
 from homeassistant.helpers import config_entry_oauth2_flow
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -89,9 +89,22 @@ class HinenOAuth2FlowHandler(config_entry_oauth2_flow.AbstractOAuth2FlowHandler,
         if self.source == SOURCE_REAUTH:
             self._abort_if_unique_id_mismatch(reason="wrong_account")
             return self.async_update_reload_and_abort(self._get_reauth_entry(), data=data)
+        if self.source == SOURCE_RECONFIGURE:
+            self._abort_if_unique_id_mismatch(reason="wrong_account")
+            return self.async_update_reload_and_abort(self._get_reconfigure_entry(), data=data)
         self._abort_if_unique_id_configured()
         title = devices[0].get("deviceName") or "Hinen Solar Advanced"
         return self.async_create_entry(title=title, data=data)
+
+    async def async_step_reconfigure(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        """Re-enter credentials without waiting for the token to fail.
+
+        Reauth only becomes reachable once the stored token is rejected, which is
+        too late when the credentials are rotated deliberately — the entry still
+        holds the old client id and secret while the current access token keeps
+        working. This gives a path to update them on demand.
+        """
+        return await self.async_step_user()
 
     async def async_step_reauth(self, entry_data: Mapping[str, Any]) -> ConfigFlowResult:
         """Handle re-authentication when the stored token becomes invalid."""

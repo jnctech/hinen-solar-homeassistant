@@ -33,9 +33,11 @@ All Silver rules are met.
 ## Gold
 - ✅ devices, diagnostics (OAuth material, serial and device id redacted),
   entity-category, entity-device-class
+- ✅ reconfiguration-flow — credentials can be replaced on demand, not only after
+  the token is rejected
 - ⬜ dynamic-devices, entity-disabled-by-default, entity-translations,
-  exception-translations, icon-translations, reconfiguration-flow, repair-issues,
-  stale-devices, and the docs-* rules
+  exception-translations, icon-translations, repair-issues, stale-devices, and the
+  docs-* rules
 - ➖ discovery, discovery-update-info — exempt (cloud-polling)
 
 ## Platinum
