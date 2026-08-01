@@ -1,6 +1,6 @@
 # Hinen Solar Advanced — Home Assistant Integration
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-blue.svg)](https://hacs.xyz)
 [![GitHub release](https://img.shields.io/github/v/release/jnctech/hinen-solar-homeassistant)](https://github.com/jnctech/hinen-solar-homeassistant/releases)
 [![License](https://img.shields.io/github/license/jnctech/hinen-solar-homeassistant.svg)](LICENSE)
 
@@ -26,9 +26,22 @@ own developer credentials, so nothing is hard-coded or shared.
 
 ## Installation (HACS)
 
-1. HACS → **Integrations** → ⋮ → **Custom repositories**.
+**Hinen Solar Advanced** is in the default HACS store:
+
+1. In HACS, search for **Hinen Solar Advanced**.
+2. Open it, choose **Download**, then restart Home Assistant.
+
+<details>
+<summary>Not showing up yet? Add it as a custom repository</summary>
+
+A newly listed integration can take a few hours to propagate to every HACS
+instance. Until it appears in search, add it manually:
+
+1. HACS → ⋮ → **Custom repositories**.
 2. Add `https://github.com/jnctech/hinen-solar-homeassistant`, category **Integration**.
 3. Install **Hinen Solar Advanced**, then restart Home Assistant.
+
+</details>
 
 ## Setup
 
